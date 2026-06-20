@@ -23,6 +23,8 @@
   --shadow:0 28px 90px rgba(0,0,0,.34);
   --ease:cubic-bezier(.22,1,.36,1);
   --panel-depth:clamp(240px,36vmin,560px);
+  --panel-motion-ms:420ms;
+  --nav-motion-ms:420ms;
 }
 
 *{
@@ -102,20 +104,28 @@ a{
   left:50%;
   transform:translateX(-50%);
   z-index:20;
-  width:min(640px,calc(100vw - 24px));
+  width:max-content;
+  max-width:calc(100vw - 24px);
 }
 
 .nav{
   position:relative;
   display:flex;
-  gap:8px;
+  gap:6px;
   padding:8px;
   border:1px solid rgba(255,255,255,.14);
   border-radius:999px;
   background:rgba(8,14,24,.46);
   backdrop-filter:blur(22px) saturate(160%);
   box-shadow:0 20px 55px rgba(0,0,0,.18);
-  overflow:hidden;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+
+.nav::-webkit-scrollbar{
+  display:none;
 }
 
 .nav-indicator{
@@ -128,25 +138,42 @@ a{
   background:linear-gradient(135deg, rgba(228,240,255,.92), rgba(166,205,255,.88));
   box-shadow:0 12px 26px rgba(156,201,255,.28);
   transform:translateX(0);
-  transition:transform .8s var(--ease), width .8s var(--ease), opacity .3s ease;
+  transition:transform var(--nav-motion-ms) var(--ease), width var(--nav-motion-ms) var(--ease), opacity .3s ease, box-shadow var(--nav-motion-ms) var(--ease);
   pointer-events:none;
+  overflow:hidden;
+}
+
+.nav-indicator::after{
+  content:'';
+  position:absolute;
+  left:18%;
+  right:18%;
+  bottom:7px;
+  height:2px;
+  border-radius:999px;
+  background:rgba(7,17,30,.48);
+  box-shadow:0 0 14px rgba(255,255,255,.5);
 }
 
 .nav-btn{
   position:relative;
   z-index:1;
   display:inline-flex;
-  flex:1;
+  flex:0 0 auto;
   align-items:center;
   justify-content:center;
-  min-width:86px;
-  padding:12px 16px;
+  min-width:84px;
+  padding:12px 15px;
   border-radius:999px;
   color:rgba(240,245,252,.82);
   font-weight:600;
   letter-spacing:.02em;
   cursor:pointer;
   transition:transform .35s var(--ease), color .35s ease, opacity .35s ease;
+}
+
+.nav-section-btn{
+  white-space:nowrap;
 }
 
 .nav-btn:hover,
@@ -162,6 +189,36 @@ a{
 .nav-btn:focus-visible{
   outline:2px solid rgba(156,201,255,.55);
   outline-offset:4px;
+}
+
+.nav-cta{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  flex:0 0 auto;
+  align-items:center;
+  justify-content:center;
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(135deg, rgba(228,240,255,.96), rgba(166,205,255,.9));
+  color:#07111e;
+  font-weight:800;
+  letter-spacing:.02em;
+  box-shadow:0 14px 34px rgba(156,201,255,.2);
+  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+  white-space:nowrap;
+}
+
+.nav-cta:hover,
+.nav-cta:focus-visible{
+  transform:translateY(-1px);
+  box-shadow:0 18px 44px rgba(156,201,255,.28);
+  border-color:rgba(255,255,255,.4);
+}
+
+.nav-cta.is-highlighted{
+  box-shadow:0 18px 44px rgba(156,201,255,.3);
 }
 
 .cube-stage{
@@ -188,7 +245,7 @@ a{
   transform:scale(.98);
   filter:blur(8px);
   transform-origin:center center;
-  transition:opacity 420ms var(--ease), transform 420ms var(--ease), filter 420ms ease;
+  transition:opacity var(--panel-motion-ms) var(--ease), transform var(--panel-motion-ms) var(--ease), filter var(--panel-motion-ms) ease;
   will-change:opacity, transform, filter;
   padding:clamp(92px,8vh,126px) clamp(18px,4vw,64px) clamp(20px,3vw,36px);
 }
@@ -199,6 +256,10 @@ a{
   transform:scale(1);
   filter:blur(0);
   z-index:3;
+}
+
+.panel.panel-about{
+  padding:0;
 }
 
 .panel > *{
@@ -277,7 +338,7 @@ a{
 .reveal{
   opacity:0;
   transform:translateY(10px) scale(.992);
-  transition:opacity 420ms var(--ease), transform 420ms var(--ease);
+  transition:opacity var(--panel-motion-ms) var(--ease), transform var(--panel-motion-ms) var(--ease);
   transition-delay:0ms;
 }
 
@@ -317,10 +378,10 @@ a{
 
 .home-hero-image{
   display:block;
-  width:min(58vw,520px);
-  max-width:88vw;
+  width:min(90vw,1060px);
+  max-width:95vw;
   height:auto;
-  max-height:68vh;
+  max-height:84vh;
   filter:drop-shadow(0 14px 28px rgba(156,201,255,.14)) drop-shadow(0 28px 70px rgba(0,0,0,.36));
   transform:translateZ(0);
 }
@@ -429,15 +490,18 @@ a{
 }
 
 .about-diagram{
-  position:relative;
-  width:min(1180px,100%);
-  height:min(76vh,760px);
-  margin:0 auto;
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(1120px,92vw);
+  height:min(78vh,780px);
+  margin:0;
   display:grid;
   grid-template-columns:minmax(140px,1fr) minmax(280px,420px) minmax(140px,1fr);
   grid-template-rows:minmax(120px,1fr) minmax(260px,1.1fr) minmax(120px,1fr);
   gap:clamp(12px,2vw,28px);
   align-items:center;
+  transform:translate(-50%,-50%);
 }
 
 .about-visual-wrap{
@@ -445,9 +509,17 @@ a{
   left:50%;
   top:50%;
   z-index:2;
-  width:min(36vw,420px);
-  max-width:420px;
+  width:min(34vw,400px);
+  max-width:400px;
   transform:translate(-50%,-50%);
+}
+
+.about-visual-wrap.reveal{
+  transform:translate(-50%,-50%) translateY(10px) scale(.992);
+}
+
+.panel.is-active .about-visual-wrap.reveal{
+  transform:translate(-50%,-50%) translateY(0) scale(1);
 }
 
 .about-visual-wrap::before{
@@ -470,12 +542,22 @@ a{
 }
 
 .about-callout{
+  --callout-transform:translate3d(0,0,0);
   position:absolute;
   width:min(240px,24vw);
   padding:14px 16px 14px 18px;
   border-radius:22px;
   z-index:3;
   overflow:visible;
+  transform:var(--callout-transform);
+}
+
+.about-callout.reveal{
+  transform:var(--callout-transform) translateY(10px) scale(.992);
+}
+
+.panel.is-active .about-callout.reveal{
+  transform:var(--callout-transform) translateY(0) scale(1);
 }
 
 .about-callout::before{
@@ -551,7 +633,7 @@ a{
 .about-callout--ml{
   top:42%;
   left:0;
-  transform:translateY(-50%);
+  --callout-transform:translateY(-50%);
 }
 
 .about-callout--ml::before{
@@ -569,7 +651,7 @@ a{
 .about-callout--mr{
   top:42%;
   right:0;
-  transform:translateY(-50%);
+  --callout-transform:translateY(-50%);
 }
 
 .about-callout--mr::before{
@@ -630,19 +712,37 @@ a{
 }
 
 .section-grid--about{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  margin:0;
+}
+
+.section-grid--projects{
+  grid-template-columns:minmax(300px,.82fr) minmax(0,1.18fr);
+  align-items:center;
+}
+
+.section-grid--certificates{
+  grid-template-columns:minmax(280px,.76fr) minmax(0,1.24fr);
+  align-items:center;
+}
+
+.section-grid--resume{
   grid-template-columns:1fr;
   align-items:center;
   justify-items:center;
 }
 
-.section-grid--projects{
-  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
-  align-items:center;
-}
-
 .section-grid--contact{
-  grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
-  align-items:center;
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
 }
 
 .section-copy{
@@ -740,12 +840,66 @@ a{
   gap:14px;
 }
 
+.projects-layout{
+  position:relative;
+  display:block;
+  width:100%;
+  height:min(74vh,760px);
+  min-height:540px;
+}
+
 .project-card{
   position:relative;
   overflow:hidden;
   padding:20px;
   border-radius:24px;
   min-height:176px;
+}
+
+.projects-layout .project-card{
+  position:absolute;
+  width:min(44%,420px);
+  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+  transform:translate3d(0,0,0) rotate(var(--card-rotate,0deg));
+}
+
+.projects-layout .project-card:hover{
+  transform:translate3d(0,-8px,0) rotate(var(--card-rotate,0deg)) scale(1.015);
+  box-shadow:0 24px 80px rgba(0,0,0,.28);
+  border-color:rgba(220,236,255,.32);
+}
+
+.project-card--orbit-1{
+  left:2%;
+  top:2%;
+  --card-rotate:-5deg;
+}
+
+.project-card--orbit-2{
+  right:0;
+  top:12%;
+  --card-rotate:4deg;
+}
+
+.project-card--orbit-3{
+  left:10%;
+  top:39%;
+  width:min(40%,380px);
+  --card-rotate:-6deg;
+}
+
+.project-card--orbit-4{
+  right:8%;
+  top:50%;
+  width:min(40%,380px);
+  --card-rotate:5deg;
+}
+
+.project-card--orbit-5{
+  left:28%;
+  bottom:0;
+  width:min(44%,420px);
+  --card-rotate:-2deg;
 }
 
 .project-card::after{
@@ -782,6 +936,152 @@ a{
   color:var(--muted);
   line-height:1.72;
   max-width:44ch;
+}
+
+.certificate-layout{
+  position:relative;
+  width:100%;
+  height:min(78vh,760px);
+  min-height:620px;
+  isolation:isolate;
+  perspective:1200px;
+}
+
+.certificate-layout::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:0;
+  width:min(70%,580px);
+  aspect-ratio:1;
+  transform:translate(-50%,-50%) rotate(18deg);
+  clip-path:polygon(50% 0, 96% 35%, 78% 92%, 22% 92%, 4% 35%);
+  border:1px solid rgba(220,236,255,.2);
+  background:linear-gradient(135deg, rgba(156,201,255,.1), rgba(255,255,255,.025));
+  box-shadow:inset 0 0 42px rgba(156,201,255,.08), 0 0 70px rgba(156,201,255,.08);
+  opacity:.72;
+  pointer-events:none;
+}
+
+.certificate-layout::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:0;
+  width:min(36%,300px);
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(220,236,255,.16), rgba(156,201,255,.06) 42%, transparent 70%);
+  filter:blur(4px);
+  pointer-events:none;
+}
+
+.certificate-card{
+  --card-transform:translate3d(0,0,0);
+  position:absolute;
+  z-index:2;
+  width:min(25vw,248px);
+  padding:22px;
+  border-radius:24px;
+  min-height:168px;
+  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+  transform:var(--card-transform);
+  transform-style:preserve-3d;
+  overflow:hidden;
+}
+
+.certificate-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,.18), transparent 36%, rgba(156,201,255,.12));
+  opacity:.55;
+  pointer-events:none;
+}
+
+.certificate-card > *{
+  position:relative;
+  z-index:1;
+}
+
+.certificate-card.reveal{
+  transform:var(--card-transform) translateY(10px) scale(.992);
+}
+
+.panel.is-active .certificate-card.reveal{
+  transform:var(--card-transform) translateY(0) scale(1);
+}
+
+.certificate-card:hover{
+  transform:var(--card-transform) translateY(-8px) scale(1.018);
+  box-shadow:0 26px 88px rgba(0,0,0,.32), 0 0 36px rgba(156,201,255,.16);
+  border-color:rgba(220,236,255,.36);
+}
+
+.panel.is-active .certificate-card.reveal:hover{
+  transform:var(--card-transform) translateY(-8px) scale(1.018);
+}
+
+.certificate-card--1{
+  left:50%;
+  top:1%;
+  --card-transform:translateX(-50%) rotate(-1deg) translateZ(24px);
+}
+
+.certificate-card--2{
+  right:3%;
+  top:15%;
+  --card-transform:rotate(5deg) translateZ(12px);
+}
+
+.certificate-card--3{
+  right:8%;
+  bottom:10%;
+  --card-transform:rotate(-4deg) translateZ(18px);
+}
+
+.certificate-card--4{
+  left:50%;
+  bottom:0;
+  --card-transform:translateX(-50%) rotate(2deg) translateZ(8px);
+}
+
+.certificate-card--5{
+  left:50%;
+  top:50%;
+  width:min(30vw,300px);
+  --card-transform:translate(-50%,-50%) scale(1.06) translateZ(42px);
+  z-index:4;
+}
+
+.certificate-card--6{
+  left:8%;
+  bottom:10%;
+  --card-transform:rotate(4deg) translateZ(18px);
+}
+
+.certificate-card--7{
+  left:3%;
+  top:15%;
+  --card-transform:rotate(-5deg) translateZ(12px);
+}
+
+.certificate-org{
+  display:block;
+  margin-top:6px;
+  color:rgba(232,240,252,.76);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-size:.74rem;
+}
+
+.certificate-card p{
+  margin-top:12px;
+  color:var(--muted);
+  line-height:1.72;
 }
 
 .project-tags{
@@ -847,6 +1147,198 @@ a{
   gap:14px;
 }
 
+.contact-hub-layout{
+  width:min(820px,100%);
+  display:grid;
+  justify-items:center;
+  gap:18px;
+  text-align:center;
+}
+
+.contact-hub{
+  position:relative;
+  width:min(760px,100%);
+  padding:28px;
+  border-radius:32px;
+  overflow:hidden;
+}
+
+.contact-hub::before{
+  content:'';
+  position:absolute;
+  inset:-30%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(220,236,255,.16), transparent 28%),
+    radial-gradient(circle at 80% 86%, rgba(156,201,255,.12), transparent 34%);
+  opacity:.9;
+  pointer-events:none;
+}
+
+.contact-hub > *{
+  position:relative;
+  z-index:1;
+}
+
+.contact-hub-title{
+  margin-top:10px;
+  color:#fff;
+  font-size:clamp(1.9rem,4vw,3.4rem);
+  line-height:1;
+  letter-spacing:-.06em;
+}
+
+.contact-hub-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin-top:22px;
+}
+
+.contact-line{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-height:132px;
+  padding:18px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+  color:inherit;
+  text-align:left;
+  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+}
+
+.contact-line:hover,
+.contact-line:focus-visible{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
+  border-color:rgba(220,236,255,.28);
+}
+
+.contact-line-label{
+  color:rgba(232,240,252,.74);
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  font-size:.72rem;
+}
+
+.contact-line strong{
+  font-size:clamp(1.15rem,2.3vw,1.8rem);
+  letter-spacing:-.05em;
+  color:#fff;
+}
+
+.contact-line-meta{
+  color:var(--muted);
+  line-height:1.6;
+  font-size:.95rem;
+}
+
+.social-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+
+.social-btn{
+  --social-glow:rgba(156,201,255,.22);
+  position:relative;
+  width:58px;
+  height:58px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.05);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(0,0,0,.16);
+  overflow:hidden;
+  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease, background .35s ease;
+}
+
+.social-btn::before{
+  content:'';
+  position:absolute;
+  inset:-45%;
+  background:radial-gradient(circle, var(--social-glow), transparent 58%);
+  opacity:0;
+  transform:scale(.82);
+  transition:opacity .35s ease, transform .35s var(--ease);
+}
+
+.social-btn:hover,
+.social-btn:focus-visible{
+  transform:translateY(-4px) rotate(-4deg) scale(1.06);
+  border-color:rgba(220,236,255,.3);
+  box-shadow:0 18px 44px var(--social-glow);
+  background:rgba(255,255,255,.08);
+}
+
+.social-btn:hover::before,
+.social-btn:focus-visible::before{
+  opacity:1;
+  transform:scale(1);
+}
+
+.social-btn svg{
+  position:relative;
+  z-index:1;
+  width:22px;
+  height:22px;
+  fill:currentColor;
+}
+
+.social-btn--github{--social-glow:rgba(255,255,255,.2);}
+.social-btn--facebook{--social-glow:rgba(24,119,242,.34);}
+.social-btn--whatsapp{--social-glow:rgba(37,211,102,.34);}
+.social-btn--telegram{--social-glow:rgba(42,171,238,.34);}
+.social-btn--instagram{--social-glow:rgba(225,48,108,.34);}
+
+.resume-panel{
+  width:min(760px,100%);
+  display:grid;
+  place-items:center;
+  gap:20px;
+  text-align:center;
+}
+
+.resume-card{
+  width:min(620px,100%);
+  padding:34px 28px;
+  border-radius:28px;
+}
+
+.resume-card p{
+  color:var(--muted);
+  line-height:1.74;
+  margin-top:14px;
+}
+
+.resume-download{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px 22px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(135deg, rgba(228,240,255,.92), rgba(166,205,255,.88));
+  color:#07111e;
+  font-weight:700;
+  letter-spacing:.02em;
+  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+}
+
+.resume-download:hover,
+.resume-download:focus-visible{
+  transform:translateY(-1px);
+  box-shadow:0 18px 48px rgba(156,201,255,.22);
+  border-color:rgba(255,255,255,.36);
+}
+
 .panel .primary-link{
   display:inline-flex;
   align-items:center;
@@ -877,15 +1369,21 @@ a{
   }
 
   .home-hero-image{
-    width:min(66vw,430px);
-    max-height:60vh;
+    width:min(88vw,760px);
+    max-height:68vh;
   }
 
   .section-grid--about,
   .section-grid--projects,
+  .section-grid--certificates,
   .section-grid--contact{
     grid-template-columns:1fr;
     align-content:start;
+  }
+
+  .section-grid--about{
+    align-content:center;
+    place-items:center;
   }
 
   .mini-grid,
@@ -893,37 +1391,67 @@ a{
     grid-template-columns:1fr;
   }
 
+  .certificate-layout{
+    height:min(56vh,520px);
+    min-height:440px;
+  }
+
+  .projects-layout{
+    height:auto;
+    min-height:0;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .projects-layout .project-card{
+    position:relative;
+    top:auto;
+    right:auto;
+    bottom:auto;
+    left:auto;
+    width:100%;
+    transform:none;
+  }
+
   .project-card--featured{
     min-height:240px;
   }
 
-  .portrait-frame{
-    min-height:360px;
+  .resume-card{
+    width:min(100%,560px);
   }
 
-  .home-copy{
-    left:16px;
-    right:16px;
-    bottom:86px;
-    width:auto;
+  .about-diagram{
+    width:min(94vw,600px);
+    height:min(72vh,720px);
   }
 
-  .home-hint{
-    left:16px;
-    right:auto;
-    bottom:18px;
+  .certificate-card{
+    width:min(31vw,210px);
+    min-height:150px;
+    padding:18px;
+  }
+
+  .certificate-card--5{
+    width:min(35vw,240px);
+  }
+
+  .contact-hub{
+    width:min(720px,100%);
   }
 }
 
-@media (max-width: 1100px) and (min-width: 821px){
+@media (max-width: 1100px) and (min-width: 981px){
   .about-diagram{
+    width:min(1080px,100%);
     grid-template-columns:minmax(120px,1fr) minmax(260px,360px) minmax(120px,1fr);
     grid-template-rows:minmax(100px,1fr) minmax(240px,1fr) minmax(100px,1fr);
     height:min(72vh,700px);
   }
 
   .about-visual-wrap{
-    width:min(32vw,360px);
+    width:min(34vw,380px);
   }
 
   .about-callout{
@@ -934,17 +1462,31 @@ a{
   .about-callout--br{
     display:none;
   }
+
+  .certificate-layout{
+    height:min(72vh,700px);
+    min-height:520px;
+  }
+
+  .certificate-card{
+    width:min(26vw,220px);
+  }
+
+  .certificate-card--5{
+    width:min(30vw,260px);
+  }
 }
 
 @media (max-width: 640px){
   .nav-shell{
     top:14px;
-    width:calc(100vw - 18px);
+    width:calc(100vw - 12px);
   }
 
   .nav{
-    gap:6px;
-    padding:6px;
+    gap:4px;
+    padding:6px 8px;
+    justify-content:flex-start;
   }
 
   .nav-indicator{
@@ -955,8 +1497,13 @@ a{
 
   .nav-btn{
     min-width:0;
-    padding:10px 8px;
-    font-size:.78rem;
+    padding:8px 10px;
+    font-size:.68rem;
+  }
+
+  .nav-cta{
+    padding:8px 12px;
+    font-size:.68rem;
   }
 
   .panel{
@@ -966,36 +1513,49 @@ a{
   }
 
   .home-hero-image{
-    width:min(78vw,330px);
-    max-height:52vh;
+    width:min(94vw,520px);
+    max-height:66vh;
   }
 
   .about-diagram{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    height:auto;
-    min-height:0;
-    gap:8px;
-    padding-bottom:18px;
+    width:100%;
+    height:100%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    display:block;
   }
 
   .about-visual-wrap{
-    position:relative;
-    left:auto;
-    top:auto;
-    transform:none;
-    width:min(76vw,300px);
-    max-width:300px;
+    width:min(64vw,240px);
+    max-width:240px;
   }
 
   .about-callout{
-    position:static;
-    width:min(100%,520px);
-    max-width:520px;
-    padding:12px 14px;
-    transform:none;
+    --callout-transform:translateX(-50%);
+    position:absolute;
+    left:50%;
+    width:min(88vw,360px);
+    max-width:360px;
+    padding:10px 12px;
+  }
+
+  .about-callout--tl{
+    top:calc(50% + 168px);
+  }
+
+  .about-callout--tr{
+    top:calc(50% + 220px);
+  }
+
+  .about-callout--ml{
+    top:calc(50% + 272px);
+  }
+
+  .about-callout--mr,
+  .about-callout--bl,
+  .about-callout--br{
+    display:none;
   }
 
   .about-callout::before,
@@ -1003,13 +1563,70 @@ a{
     display:none;
   }
 
-  .about-callout--bl,
-  .about-callout--br{
+  .about-callout p{
     display:none;
   }
 
-  .about-callout p{
+  .certificate-layout{
+    height:auto;
+    min-height:0;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    padding-bottom:24px;
+  }
+
+  .panel-certificates{
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .section-grid--certificates{
+    height:auto;
+    min-height:100%;
+    align-content:start;
+    padding-bottom:24px;
+  }
+
+  .certificate-layout::before,
+  .certificate-layout::after{
     display:none;
+  }
+
+  .certificate-card{
+    --card-transform:translate3d(0,0,0);
+    position:relative;
+    left:auto;
+    right:auto;
+    top:auto;
+    bottom:auto;
+    width:100%;
+  }
+
+  .certificate-card--5{
+    width:100%;
+  }
+
+  .contact-hub{
+    padding:22px 18px;
+  }
+
+  .contact-hub-grid{
+    grid-template-columns:1fr;
+  }
+
+  .contact-line{
+    min-height:0;
+    padding:16px;
+  }
+
+  .social-btn{
+    width:52px;
+    height:52px;
+  }
+
+  .resume-card{
+    padding:28px 20px;
   }
 
   .home-copy,
@@ -1036,10 +1653,12 @@ a{
   <nav class="nav-shell" aria-label="Primary">
     <div class="nav">
       <div class="nav-indicator" aria-hidden="true"></div>
-      <button type="button" class="nav-btn is-active" data-index="0" aria-current="page">Home</button>
-      <button type="button" class="nav-btn" data-index="1">About</button>
-      <button type="button" class="nav-btn" data-index="2">Projects</button>
-      <button type="button" class="nav-btn" data-index="3">Contact</button>
+      <button type="button" class="nav-btn nav-section-btn is-active" data-index="0" aria-current="page">Home</button>
+      <button type="button" class="nav-btn nav-section-btn" data-index="1">About</button>
+      <button type="button" class="nav-btn nav-section-btn" data-index="2">Projects</button>
+      <button type="button" class="nav-btn nav-section-btn" data-index="3">Certificates</button>
+      <button type="button" class="nav-btn nav-section-btn" data-index="4">Contact</button>
+      <a class="nav-cta" href="resume.pdf" download="Zidan_Resume.pdf">Download Resume</a>
     </div>
   </nav>
 
@@ -1107,7 +1726,7 @@ a{
           </div>
 
           <div class="projects-layout">
-            <article class="project-card project-card--featured glass-card reveal" style="--delay:300ms">
+            <article class="project-card project-card--featured glass-card reveal project-card--orbit-1" style="--delay:300ms">
               <div class="project-index">01 / Immersive commerce</div>
               <h3>Aurora Commerce</h3>
               <p>A cinematic storefront concept with tactile product layers, motion-led navigation, and a calm premium rhythm.</p>
@@ -1118,65 +1737,169 @@ a{
               </div>
             </article>
 
-            <article class="project-card glass-card reveal" style="--delay:380ms">
+            <article class="project-card glass-card reveal project-card--orbit-2" style="--delay:380ms">
               <div class="project-index">02 / Design system</div>
               <h3>Studio OS</h3>
               <p>A workspace interface for products that need clarity, hierarchy, and a glass-first aesthetic.</p>
+              <div class="project-tags">
+                <span>UI</span>
+                <span>Systems</span>
+              </div>
             </article>
 
-            <article class="project-card glass-card reveal" style="--delay:440ms">
+            <article class="project-card glass-card reveal project-card--orbit-3" style="--delay:440ms">
               <div class="project-index">03 / Launch page</div>
               <h3>Noir Launch</h3>
               <p>A teaser experience built around video, light, and measured transitions for high-end product storytelling.</p>
+              <div class="project-tags">
+                <span>Launch</span>
+                <span>Motion</span>
+              </div>
+            </article>
+
+            <article class="project-card glass-card reveal project-card--orbit-4" style="--delay:500ms">
+              <div class="project-index">04 / Product narrative</div>
+              <h3>Atlas Grid</h3>
+              <p>An angular visual system that balances technical precision with soft cinematic depth.</p>
+              <div class="project-tags">
+                <span>UX</span>
+                <span>Motion</span>
+                <span>Systems</span>
+              </div>
+            </article>
+
+            <article class="project-card glass-card reveal project-card--orbit-5" style="--delay:560ms">
+              <div class="project-index">05 / Brand story</div>
+              <h3>Lumen Case</h3>
+              <p>A polished case-study layout with luminous pacing and a quiet luxury presentation.</p>
+              <div class="project-tags">
+                <span>Brand</span>
+                <span>Editorial</span>
+              </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="panel panel-contact" data-face="3" aria-label="Contact" aria-hidden="true" inert>
-        <div class="face-tag">04 / Contact</div>
-        <div class="section-grid section-grid--contact">
+      <section class="panel panel-certificates" data-face="3" aria-label="Certificates" aria-hidden="true" inert>
+        <div class="face-tag">04 / Certificates</div>
+        <div class="section-grid section-grid--certificates">
           <div class="section-copy">
-            <div class="section-eyebrow reveal" style="--delay:120ms">Get in touch</div>
-            <h2 class="section-title reveal" style="--delay:180ms">Let's build something immersive.</h2>
-            <p class="section-lead reveal" style="--delay:240ms">Open for select collaborations, launch systems, and immersive portfolio builds that need a premium spatial feel.</p>
-            <div class="contact-actions reveal" style="--delay:300ms">
-              <button type="button" class="primary-link" data-target="2">See Projects</button>
-              <a class="secondary-link" href="mailto:hello@luxeportfolio.dev">Send Email</a>
-            </div>
+            <div class="section-eyebrow reveal" style="--delay:120ms">Credentials</div>
+            <h2 class="section-title reveal" style="--delay:180ms">Certificates</h2>
+            <p class="section-lead reveal" style="--delay:240ms">Selected credentials that support design systems, motion-led interfaces, and premium digital craftsmanship.</p>
           </div>
 
-          <div class="contact-stack">
-            <article class="contact-card contact-card--primary glass-card reveal" style="--delay:340ms">
-              <div>
-                <strong>Start with a message</strong>
-                <div class="contact-email">hello@luxeportfolio.dev</div>
-                <p>For premium launches, portfolio rebuilds, and motion-led digital products.</p>
-              </div>
-              <div class="contact-actions">
-                <a class="primary-link" href="mailto:hello@luxeportfolio.dev">Book a conversation</a>
-                <button type="button" class="secondary-link" data-target="0">Back to Home</button>
+          <div class="certificate-layout">
+            <article class="certificate-card certificate-card--1 glass-card reveal" style="--delay:300ms">
+              <strong>Luxury UI Systems</strong>
+              <span class="certificate-org">Design Lab</span>
+              <p>Completed advanced training in interface hierarchy, glassmorphism, and premium composition.</p>
+            </article>
+
+            <article class="certificate-card certificate-card--2 glass-card reveal" style="--delay:340ms">
+              <strong>Motion Interface Practice</strong>
+              <span class="certificate-org">Motion Academy</span>
+              <p>Focused on easing, transition timing, and expressive but restrained navigation systems.</p>
+            </article>
+
+            <article class="certificate-card certificate-card--3 glass-card reveal" style="--delay:380ms">
+              <strong>Responsive Product Design</strong>
+              <span class="certificate-org">Studio School</span>
+              <p>Certified in building responsive layouts that remain calm, consistent, and performance aware.</p>
+            </article>
+
+            <article class="certificate-card certificate-card--4 glass-card reveal" style="--delay:420ms">
+              <strong>Frontend Engineering</strong>
+              <span class="certificate-org">Code Institute</span>
+              <p>Validated practical component architecture, performance basics, and production-ready interface delivery.</p>
+            </article>
+
+            <article class="certificate-card certificate-card--5 glass-card reveal" style="--delay:460ms">
+              <strong>Creative Web Craft</strong>
+              <span class="certificate-org">Portfolio Guild</span>
+              <p>Central credential for polished digital storytelling, visual rhythm, and refined interaction systems.</p>
+            </article>
+
+            <article class="certificate-card certificate-card--6 glass-card reveal" style="--delay:500ms">
+              <strong>Visual Design Foundations</strong>
+              <span class="certificate-org">Design School</span>
+              <p>Covered typography, spacing, contrast, and composition for clean premium brand experiences.</p>
+            </article>
+
+            <article class="certificate-card certificate-card--7 glass-card reveal" style="--delay:540ms">
+              <strong>Interaction Prototyping</strong>
+              <span class="certificate-org">UX Academy</span>
+              <p>Focused on rapid prototypes, micro-interactions, and intuitive user flows across screen sizes.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-contact" data-face="4" aria-label="Contact" aria-hidden="true" inert>
+        <div class="face-tag">05 / Contact</div>
+        <div class="section-grid section-grid--contact">
+          <div class="contact-hub-layout">
+            <article class="contact-hub glass-card reveal" style="--delay:160ms">
+              <div class="section-eyebrow">Contact hub</div>
+              <h2 class="contact-hub-title">Let's connect.</h2>
+              <div class="contact-hub-grid">
+                <a class="contact-line" href="mailto:hello@luxeportfolio.dev">
+                  <span class="contact-line-label">Email</span>
+                  <strong>hello@luxeportfolio.dev</strong>
+                  <span class="contact-line-meta">Opens your default email client.</span>
+                </a>
+                <a class="contact-line" href="tel:+15550123456">
+                  <span class="contact-line-label">Phone</span>
+                  <strong>+1 (555) 012-3456</strong>
+                  <span class="contact-line-meta">Tap to start a phone call.</span>
+                </a>
               </div>
             </article>
 
-            <div class="contact-grid">
-              <article class="contact-card glass-card reveal" style="--delay:400ms">
-                <strong>Response</strong>
-                <p>24-48 hours for qualified project inquiries.</p>
-              </article>
-              <article class="contact-card glass-card reveal" style="--delay:440ms">
-                <strong>Location</strong>
-                <p>Remote / Worldwide.</p>
-              </article>
-              <article class="contact-card glass-card reveal" style="--delay:480ms">
-                <strong>Availability</strong>
-                <p>Select openings for new launches and studio work.</p>
-              </article>
-              <article class="contact-card glass-card reveal" style="--delay:520ms">
-                <strong>Focus</strong>
-                <p>Portfolio sites, creative direction, motion, and glass systems.</p>
-              </article>
+            <div class="social-buttons reveal" style="--delay:280ms" aria-label="Social profiles">
+              <a class="social-btn social-btn--github" href="https://github.com/zidan" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" title="GitHub">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 .5A11.5 11.5 0 0 0 8.36 22.9c.58.11.79-.25.79-.56v-2.17c-3.2.7-3.88-1.38-3.88-1.38-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.17 1.18a10.9 10.9 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.25 5.69.41.35.78 1.05.78 2.12v3.14c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z" />
+                </svg>
+              </a>
+              <a class="social-btn social-btn--facebook" href="https://www.facebook.com/zidan" target="_blank" rel="noopener noreferrer" aria-label="Facebook profile" title="Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M22 12.06C22 6.48 17.52 2 11.94 2S2 6.48 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2V8.6h-1.26c-1.24 0-1.63.77-1.63 1.56v1.9h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06Z" />
+                </svg>
+              </a>
+              <a class="social-btn social-btn--whatsapp" href="https://wa.me/15550123456" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp profile" title="WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M20.46 3.49A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.9 11.9 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.18-1.24-6.17-3.49-8.41ZM12.06 21.78h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.43 9.88-9.88 9.88Zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" />
+                </svg>
+              </a>
+              <a class="social-btn social-btn--telegram" href="https://t.me/zidan" target="_blank" rel="noopener noreferrer" aria-label="Telegram profile" title="Telegram">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M23.91 3.79 20.3 20.84c-.27 1.21-.98 1.5-1.99.93l-5.5-4.05-2.65 2.55c-.29.29-.54.54-1.11.54l.4-5.6L19.64 6c.44-.39-.1-.6-.68-.21L6.35 13.72.92 12.02c-1.18-.37-1.2-1.18.25-1.75L22.43.45c1.04-.39 1.95.25 1.48 3.34Z" />
+                </svg>
+              </a>
+              <a class="social-btn social-btn--instagram" href="https://www.instagram.com/zidan/" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile" title="Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6Zm4.4 3.3A4.7 4.7 0 1 1 7.3 12 4.7 4.7 0 0 1 12 7.3Zm0 2A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3Zm5-2.1a1.1 1.1 0 1 1-1.1 1.1A1.1 1.1 0 0 1 17 7.2Z" />
+                </svg>
+              </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-resume" data-face="5" aria-label="Resume" aria-hidden="true" inert>
+        <div class="face-tag">06 / Resume</div>
+        <div class="section-grid section-grid--resume">
+          <div class="resume-panel">
+            <div class="section-eyebrow reveal" style="--delay:120ms">Portfolio PDF</div>
+            <h2 class="section-title reveal" style="--delay:180ms">Download Resume</h2>
+            <article class="resume-card glass-card reveal" style="--delay:240ms">
+              <p>Download the latest PDF resume for a concise overview of experience, creative focus, and technical strengths.</p>
+              <div style="margin-top:20px">
+                <a class="resume-download" href="resume.pdf" download="Zidan_Resume.pdf">Download Resume</a>
+              </div>
+            </article>
           </div>
         </div>
       </section>
@@ -1186,8 +1909,10 @@ a{
 
 <script>
 const panels = [...document.querySelectorAll('.panel')];
-const navButtons = [...document.querySelectorAll('.nav-btn')];
+const navButtons = [...document.querySelectorAll('.nav-btn[data-index]')];
+const navCta = document.querySelector('.nav-cta');
 const heroButtons = [...document.querySelectorAll('[data-target]')];
+const root = document.documentElement;
 const nav = document.querySelector('.nav');
 const indicator = document.querySelector('.nav-indicator');
 
@@ -1197,21 +1922,49 @@ let unlockTimer = 0;
 let touchStartX = 0;
 let touchStartY = 0;
 let touchActive = false;
-const transitionDuration = 480;
+let wheelLocked = false;
+let wheelUnlockTimer = 0;
+const baseMotionDuration = 420;
 
-function syncNavIndicator(){
-  const activeButton = navButtons[currentIndex];
-  if(!activeButton) return;
-  const navRect = nav.getBoundingClientRect();
-  const buttonRect = activeButton.getBoundingClientRect();
-  indicator.style.width = `${buttonRect.width}px`;
-  indicator.style.transform = `translateX(${buttonRect.left - navRect.left}px)`;
+function setMotionDurations(duration){
+  const value = `${duration}ms`;
+  root.style.setProperty('--panel-motion-ms', value);
+  root.style.setProperty('--nav-motion-ms', value);
 }
 
-function setActive(index){
+function clamp(value, min, max){
+  return Math.min(max, Math.max(min, value));
+}
+
+function getActiveNavButton(){
+  return navButtons.find(button => Number(button.dataset.index) === currentIndex);
+}
+
+function clearWheelLock(){
+  wheelLocked = false;
+  window.clearTimeout(wheelUnlockTimer);
+}
+
+function syncNavIndicator(){
+  const activeButton = getActiveNavButton();
+  if(!activeButton){
+    indicator.style.opacity = '0';
+    return;
+  }
+  const indicatorLeft = parseFloat(getComputedStyle(indicator).left) || 0;
+  const buttonRect = activeButton.getBoundingClientRect();
+  indicator.style.opacity = '1';
+  indicator.style.width = `${buttonRect.width}px`;
+  indicator.style.transform = `translateX(${activeButton.offsetLeft - indicatorLeft}px)`;
+  activeButton.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+}
+
+function setActive(index, motion = {}){
   const nextIndex = (index + panels.length) % panels.length;
   if(locked || nextIndex === currentIndex) return;
 
+  const duration = clamp(motion.duration ?? baseMotionDuration, 300, 600);
+  setMotionDurations(duration);
   locked = true;
   window.clearTimeout(unlockTimer);
   currentIndex = nextIndex;
@@ -1224,45 +1977,65 @@ function setActive(index){
   });
 
   navButtons.forEach((button, i) => {
-    const active = i === currentIndex;
+    const active = Number(button.dataset.index) === currentIndex;
     button.classList.toggle('is-active', active);
     if(active) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
   });
+  navCta?.classList.toggle('is-highlighted', currentIndex === panels.length - 1);
 
   requestAnimationFrame(syncNavIndicator);
   unlockTimer = window.setTimeout(() => {
     locked = false;
-  }, transitionDuration);
+  }, duration);
 }
 
 navButtons.forEach(button => {
-  button.addEventListener('click', () => setActive(Number(button.dataset.index)));
+  button.addEventListener('click', () => {
+    clearWheelLock();
+    setActive(Number(button.dataset.index));
+  });
 });
 
 heroButtons.forEach(button => {
-  button.addEventListener('click', () => setActive(Number(button.dataset.target)));
+  button.addEventListener('click', () => {
+    clearWheelLock();
+    setActive(Number(button.dataset.target));
+  });
 });
 
 window.addEventListener('wheel', event => {
-  if(locked || Math.abs(event.deltaY) < 10) return;
   event.preventDefault();
-  setActive(currentIndex + (event.deltaY > 0 ? 1 : -1));
+  const direction = Math.sign(event.deltaY);
+  if(!direction) return;
+
+  window.clearTimeout(wheelUnlockTimer);
+  wheelUnlockTimer = window.setTimeout(() => {
+    wheelLocked = false;
+  }, 260);
+
+  if(locked || wheelLocked) return;
+  wheelLocked = true;
+  setActive(currentIndex + (direction > 0 ? 1 : -1), { duration: baseMotionDuration });
 }, { passive:false });
 
 window.addEventListener('keydown', event => {
   if(locked) return;
   if(event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'PageDown'){
     event.preventDefault();
+    clearWheelLock();
     setActive(currentIndex + 1);
   }else if(event.key === 'ArrowLeft' || event.key === 'ArrowUp' || event.key === 'PageUp'){
     event.preventDefault();
+    clearWheelLock();
     setActive(currentIndex - 1);
   }else if(event.key === 'Home'){
     event.preventDefault();
+    clearWheelLock();
     setActive(0);
   }else if(event.key === 'End'){
     event.preventDefault();
+    clearWheelLock();
     setActive(panels.length - 1);
   }
 });
@@ -1282,7 +2055,8 @@ window.addEventListener('touchend', event => {
   touchActive = false;
 
   if(Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
-  setActive(currentIndex + (dx < 0 ? 1 : -1));
+  clearWheelLock();
+  setActive(currentIndex + (dx < 0 ? 1 : -1), { duration: 420 });
 }, { passive:true });
 
 window.addEventListener('resize', syncNavIndicator);
@@ -1294,6 +2068,7 @@ panels.forEach((panel, i) => {
   panel.inert = !active;
 });
 
+setMotionDurations(baseMotionDuration);
 requestAnimationFrame(syncNavIndicator);
 </script>
 </body>
