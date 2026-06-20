@@ -31,7 +31,7 @@ position:fixed;
 top:25px;
 left:50%;
 transform:translateX(-50%);
-padding:8px 14px;
+padding:14px 28px;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -47,18 +47,18 @@ display:none;
 }
 nav ul{
 display:flex;
-gap:12px;
+gap:20px;
 list-style:none;
 align-items:center;
 }
 nav a{
 text-decoration:none;
 color:#111827;
-font-weight:500;
+font-weight:600;
 padding:8px 16px;
 border-radius:999px;
 transition:.35s;
-font-size:14px;
+font-size:16px;
 }
 
 nav a:hover{
@@ -141,7 +141,7 @@ overflow:hidden;
 .cube-scene{
 position:fixed;
 inset:0;
-perspective:2200px;
+perspective:3200px;
 perspective-origin:center;
 overflow:hidden;
 background:transparent;
@@ -170,29 +170,47 @@ backface-visibility:hidden;
 border:1px solid rgba(255,255,255,.12);
 box-shadow: inset 0 0 120px rgba(255,255,255,.05);
 background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+opacity:0;
+transition:opacity .9s ease;
+transition:opacity .6s ease;
 }
 
-.face-1{transform:rotateX(0deg) translateZ(50vh);}
-.face-2{transform:rotateX(-90deg) translateZ(50vh);}
-.face-3{transform:rotateX(-180deg) translateZ(50vh);}
-.face-4{transform:rotateX(-270deg) translateZ(50vh);}
+.face.active{
+opacity:1;
+pointer-events:auto;
+z-index:2;
+}
+
+.face-1,
+.face-2,
+.face-3,
+.face-4{
+transform:none;
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+}
+
+.face-1{opacity:1;}
+.face-2{opacity:0;}
+.face-3{opacity:0;}
+.face-4{opacity:0;}
 
 .home-video{
-width:65%;
-max-width:900px;
-margin-top:80px;
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+margin:0;
+overflow:hidden;
 transition:opacity .9s ease, transform .9s ease, filter .9s ease;
 will-change:opacity,transform,filter;
-background:rgba(255,255,255,.10);
-border:1px solid rgba(255,255,255,.35);
-box-shadow:
-0 25px 70px rgba(0,0,0,.25),
-0 10px 30px rgba(90,167,255,.15),
-inset 0 0 0 1px rgba(255,255,255,.08);
-backdrop-filter:blur(18px);
-position:relative;
-border-radius:36px;
+border-radius:28px;
+overflow:hidden;
 padding:18px;
+box-sizing:border-box;
 }
 
 .home-video video{
@@ -200,7 +218,8 @@ width:100%;
 height:100%;
 object-fit:cover;
 display:block;
-border-radius:20px;
+border-radius:24px;
+transform:scale(0.95);
 }
 
 .home-video.morph-out{
@@ -210,41 +229,24 @@ filter:blur(26px);
 transition:opacity .9s ease, filter .9s ease;
 }
 
-.home-video::before,
-.home-video::after{
-  content:"";
-  position:absolute;
-  top:50%;
-  width:140px;
-  height:140px;
-  background:radial-gradient(circle, rgba(90,167,255,.35), transparent 70%);
-  filter:blur(25px);
-  transform:translateY(-50%);
-  z-index:-1;
-  opacity:.8;
-}
-
-.home-video::before{
-  left:-60px;
-}
-
-.home-video::after{
-  right:-60px;
-  background:radial-gradient(circle, rgba(90,167,255,.30), transparent 70%);
-}
 
 .about-wrapper{
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-gap:35px;
-max-width:1200px;
+gap:18px;
+max-width:900px;
 width:100%;
 opacity:0;
 filter:blur(18px);
 transition:opacity 1.1s ease, filter 1.1s ease;
 text-align:center;
+}
+
+.face-2 .about-wrapper{
+transform:scale(0.95);
+transform-origin:center;
 }
 
 .about-wrapper.active{
@@ -253,18 +255,29 @@ filter:blur(0px);
 }
 
 .about-photo-ring{
-width:260px;
-height:260px;
-border-radius:50%;
+width:240px;
+height:340px;
+border-radius:28px;
 display:flex;
 align-items:center;
 justify-content:center;
-background:conic-gradient(from 0deg,#5aa7ff,#8ec5ff,#eaf4ff,#5aa7ff);
-animation:spinRing 18s linear infinite;
-padding:4px;
-box-shadow:
-0 0 60px rgba(90,167,255,.25),
-0 0 100px rgba(255,123,199,.12);
+background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,.08));
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.4);
+box-shadow:0 20px 60px rgba(90,167,255,.25);
+overflow:hidden;
+position:relative;
+animation:breathe 6s ease-in-out infinite;
+}
+
+.about-photo-ring::before{
+content:"";
+position:absolute;
+inset:-60px;
+background:radial-gradient(circle at center, rgba(90,167,255,.35), transparent 65%);
+filter:blur(30px);
+z-index:0;
+pointer-events:none;
 }
 
 .about-photo-placeholder{
@@ -274,11 +287,13 @@ border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(255,255,255,.18);
+background:rgba(255,255,255,.25);
 backdrop-filter:blur(24px);
 border:1px solid rgba(255,255,255,.35);
 font-weight:600;
 letter-spacing:1px;
+position:relative;
+z-index:1;
 }
 
 .about-content{
@@ -287,7 +302,7 @@ text-align:center;
 }
 
 .about-content h2{
-font-size:clamp(2.8rem,5vw,4.5rem);
+font-size:clamp(2.6rem,5vw,4.8rem);
 margin-bottom:20px;
 background:linear-gradient(90deg,#5aa7ff,#8ec5ff,#eaf4ff);
 -webkit-background-clip:text;
@@ -296,7 +311,7 @@ text-align:center;
 }
 
 .about-content p{
-font-size:1.08rem;
+font-size:1.22rem;
 line-height:1.9;
 opacity:.82;
 }
@@ -304,6 +319,12 @@ opacity:.82;
 @keyframes spinRing{
 from{transform:rotate(0deg)}
 to{transform:rotate(360deg)}
+}
+
+@keyframes breathe{
+0%{transform:scale(1)}
+50%{transform:scale(1.02)}
+100%{transform:scale(1)}
 }
 
 @media(max-width:768px){
@@ -316,8 +337,9 @@ padding:0 24px;
 text-align:center;
 }
 .about-photo-ring{
-width:200px;
-height:200px;
+width:180px;
+height:260px;
+border-radius:22px;
 }
 }
 </style>
@@ -382,7 +404,43 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 const welcomeBox = document.querySelector('.home-video');
 const cube = document.getElementById('cube');
 const aboutWrapper = document.querySelector('.about-wrapper');
+
 let currentFace = 0;
+
+const navLinks = document.querySelectorAll('nav a');
+
+function goToFace(target){
+  if (animating) return;
+  animating = true;
+  currentFace = target;
+
+  document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
+
+  const targetFace = document.querySelector('.face-' + (target + 1));
+  if (targetFace) targetFace.classList.add('active');
+
+  if (aboutWrapper) {
+    if (target === 1) aboutWrapper.classList.add('active');
+    else aboutWrapper.classList.remove('active');
+  }
+
+  if (target === 0) {
+    welcomeBox.classList.remove('morph-out');
+  } else {
+    welcomeBox.classList.add('morph-out');
+  }
+
+  setTimeout(() => {
+    animating = false;
+  }, 600);
+}
+
+navLinks.forEach((link, i) => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    goToFace(i);
+  });
+});
 
 let hidden = false;
 let animating = false;
@@ -392,42 +450,13 @@ window.addEventListener('wheel', (e) => {
   if (Math.abs(e.deltaY) < 10) return;
 
   if (e.deltaY > 0 && currentFace === 0) {
-    animating = true;
-    hidden = true;
-    currentFace = 1;
-
-    welcomeBox.classList.add('morph-out');
-
-    setTimeout(() => {
-      cube.style.transition = 'transform 1.2s cubic-bezier(.22,1,.36,1)';
-      cube.style.transform = 'rotateX(90deg)';
-
-      setTimeout(() => {
-        if (aboutWrapper) {
-          aboutWrapper.classList.add('active');
-        }
-      }, 500);
-    }, 450);
-
-    setTimeout(() => {
-      animating = false;
-    }, 1200);
+    goToFace(1);
   }
 
   if (e.deltaY < 0 && currentFace === 1) {
-    animating = true;
-    hidden = false;
-    currentFace = 0;
-
-    cube.style.transition = 'transform 1.2s cubic-bezier(.22,1,.36,1)';
-    cube.style.transform = 'rotateX(0deg)';
-    welcomeBox.classList.remove('morph-out');
-
-    setTimeout(() => {
-      animating = false;
-    }, 1200);
+    goToFace(0);
   }
-}, { passive: true });
+}, { passive: false });
 </script>
 </body>
 </html>
