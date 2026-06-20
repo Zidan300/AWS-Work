@@ -33,9 +33,18 @@
   padding:0;
 }
 
-html,body{
+html{
   width:100%;
-  height:100%;
+  min-height:100%;
+  scroll-behavior:smooth;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  width:100%;
+  height:100svh;
   overflow:hidden;
   background:var(--bg);
   color:var(--text);
@@ -91,11 +100,13 @@ a{
 }
 
 .scene-shell{
-  position:fixed;
-  inset:0;
+  position:relative;
+  height:100svh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
   z-index:2;
-  perspective:2400px;
-  overflow:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
 }
 
 .nav-shell{
@@ -222,38 +233,45 @@ a{
 }
 
 .cube-stage{
-  position:absolute;
-  inset:0;
+  position:relative;
+  min-height:100svh;
   perspective:none;
-  overflow:hidden;
+  overflow:visible;
 }
 
 .cube{
-  position:absolute;
-  inset:0;
+  position:relative;
+  min-height:100svh;
   transform:none;
   transition:none;
   will-change:auto;
 }
 
 .panel{
-  position:absolute;
-  inset:0;
+  position:relative;
+  min-height:100svh;
   overflow:hidden;
-  opacity:0;
-  pointer-events:none;
-  transform:scale(.98);
-  filter:blur(8px);
+  scroll-snap-align:start;
+  opacity:1;
+  pointer-events:auto;
+  transform:none;
+  filter:none;
   transform-origin:center center;
-  transition:opacity var(--panel-motion-ms) var(--ease), transform var(--panel-motion-ms) var(--ease), filter var(--panel-motion-ms) ease;
-  will-change:opacity, transform, filter;
+  transition:transform var(--panel-motion-ms) var(--ease), filter var(--panel-motion-ms) ease;
+  will-change:transform, filter;
   padding:clamp(92px,8vh,126px) clamp(18px,4vw,64px) clamp(20px,3vw,36px);
+  scroll-margin-top:0;
+}
+
+.panel:not(.is-active){
+  transform:scale(0.98);
+  filter:blur(8px);
+  pointer-events:none;
 }
 
 .panel.is-active{
-  opacity:1;
   pointer-events:auto;
-  transform:scale(1);
+  transform:none;
   filter:blur(0);
   z-index:3;
 }
@@ -338,11 +356,11 @@ a{
 .reveal{
   opacity:0;
   transform:translateY(10px) scale(.992);
-  transition:opacity var(--panel-motion-ms) var(--ease), transform var(--panel-motion-ms) var(--ease);
-  transition-delay:0ms;
+  transition:opacity var(--panel-motion-ms) var(--ease) var(--delay, 0ms), transform var(--panel-motion-ms) var(--ease) var(--delay, 0ms);
 }
 
-.panel.is-active .reveal{
+.panel.is-active .reveal,
+.panel.has-revealed .reveal{
   opacity:1;
   transform:translateY(0) scale(1);
 }
@@ -518,7 +536,8 @@ a{
   transform:translate(-50%,-50%) translateY(10px) scale(.992);
 }
 
-.panel.is-active .about-visual-wrap.reveal{
+.panel.is-active .about-visual-wrap.reveal,
+.panel.has-revealed .about-visual-wrap.reveal{
   transform:translate(-50%,-50%) translateY(0) scale(1);
 }
 
@@ -556,7 +575,8 @@ a{
   transform:var(--callout-transform) translateY(10px) scale(.992);
 }
 
-.panel.is-active .about-callout.reveal{
+.panel.is-active .about-callout.reveal,
+.panel.has-revealed .about-callout.reveal{
   transform:var(--callout-transform) translateY(0) scale(1);
 }
 
@@ -704,7 +724,7 @@ a{
 
 .section-grid{
   width:min(1180px,100%);
-  height:100%;
+  min-height:calc(100svh - clamp(92px,8vh,126px) - clamp(20px,3vw,36px));
   margin:0 auto;
   display:grid;
   align-content:center;
@@ -841,65 +861,112 @@ a{
 }
 
 .projects-layout{
+  --project-card-size:clamp(190px,15vw,245px);
+  --project-ring-radius:clamp(160px,18vw,235px);
   position:relative;
   display:block;
   width:100%;
-  height:min(74vh,760px);
-  min-height:540px;
+  height:min(78vh,760px);
+  min-height:calc((var(--project-ring-radius) * 2) + var(--project-card-size) + 56px);
+  isolation:isolate;
+}
+
+.projects-layout::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:calc(var(--project-ring-radius) * 2);
+  aspect-ratio:1;
+  border:1px solid rgba(220,236,255,.16);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:inset 0 0 38px rgba(156,201,255,.07), 0 0 58px rgba(156,201,255,.08);
+  opacity:.7;
+  pointer-events:none;
+}
+
+.projects-layout::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#dcecff;
+  box-shadow:0 0 22px rgba(156,201,255,.55);
+  transform:translate(-50%,-50%);
+  pointer-events:none;
 }
 
 .project-card{
   position:relative;
   overflow:hidden;
-  padding:20px;
-  border-radius:24px;
-  min-height:176px;
+  padding:0;
+  border-radius:0;
+  min-height:auto;
+  clip-path:polygon(50% 0%, 97.55% 34.55%, 79.39% 90.45%, 20.61% 90.45%, 2.45% 34.55%);
 }
 
 .projects-layout .project-card{
   position:absolute;
-  width:min(44%,420px);
+  left:50%;
+  top:50%;
+  width:var(--project-card-size);
+  aspect-ratio:1;
   transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
-  transform:translate3d(0,0,0) rotate(var(--card-rotate,0deg));
+  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--project-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1));
+  transform-origin:center;
+}
+
+.panel.is-active .projects-layout .project-card.reveal,
+.panel.has-revealed .projects-layout .project-card.reveal{
+  opacity:1;
+  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--project-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1));
 }
 
 .projects-layout .project-card:hover{
-  transform:translate3d(0,-8px,0) rotate(var(--card-rotate,0deg)) scale(1.015);
-  box-shadow:0 24px 80px rgba(0,0,0,.28);
-  border-color:rgba(220,236,255,.32);
+  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--project-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(1.08);
+  box-shadow:0 0 30px var(--accent);
+  border-color:rgba(220,236,255,.45);
+  z-index:10;
+}
+
+.panel.is-active .projects-layout .project-card.reveal:hover,
+.panel.has-revealed .projects-layout .project-card.reveal:hover{
+  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--project-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(1.08);
+}
+
+.project-card__content{
+  position:absolute;
+  inset:13%;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
 }
 
 .project-card--orbit-1{
-  left:2%;
-  top:2%;
-  --card-rotate:-5deg;
+  --orbit-angle:0deg;
 }
 
 .project-card--orbit-2{
-  right:0;
-  top:12%;
-  --card-rotate:4deg;
+  --orbit-angle:72deg;
 }
 
 .project-card--orbit-3{
-  left:10%;
-  top:39%;
-  width:min(40%,380px);
-  --card-rotate:-6deg;
+  --orbit-angle:144deg;
 }
 
 .project-card--orbit-4{
-  right:8%;
-  top:50%;
-  width:min(40%,380px);
-  --card-rotate:5deg;
+  --orbit-angle:216deg;
 }
 
 .project-card--orbit-5{
-  left:28%;
-  bottom:0;
-  width:min(44%,420px);
-  --card-rotate:-2deg;
+  --orbit-angle:288deg;
 }
 
 .project-card::after{
@@ -914,28 +981,33 @@ a{
 }
 
 .project-card--featured{
-  min-height:280px;
+  min-height:auto;
 }
 
 .project-index{
   color:rgba(232,240,252,.72);
   text-transform:uppercase;
-  letter-spacing:.22em;
-  font-size:.76rem;
+  letter-spacing:.12em;
+  font-size:clamp(.56rem,.62vw,.68rem);
 }
 
 .project-card h3{
-  margin-top:18px;
-  font-size:clamp(1.5rem,2.4vw,2.4rem);
-  line-height:.96;
+  margin-top:10px;
+  font-size:clamp(1.08rem,1.45vw,1.52rem);
+  line-height:1;
   letter-spacing:-.05em;
 }
 
 .project-card p{
-  margin-top:10px;
+  margin-top:8px;
   color:var(--muted);
-  line-height:1.72;
-  max-width:44ch;
+  line-height:1.45;
+  max-width:20ch;
+  font-size:clamp(.78rem,.82vw,.9rem);
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
 
 .certificate-layout{
@@ -1085,21 +1157,22 @@ a{
 }
 
 .project-tags{
-  margin-top:18px;
+  margin-top:10px;
   display:flex;
   flex-wrap:wrap;
+  justify-content:center;
   gap:10px;
 }
 
 .project-tags span{
-  padding:8px 12px;
+  padding:6px 8px;
   border:1px solid rgba(255,255,255,.14);
   border-radius:999px;
   background:rgba(255,255,255,.06);
   color:rgba(255,255,255,.82);
   text-transform:uppercase;
   letter-spacing:.08em;
-  font-size:.8rem;
+  font-size:.62rem;
 }
 
 .contact-card{
@@ -1245,6 +1318,7 @@ a{
 
 .social-btn{
   --social-glow:rgba(156,201,255,.22);
+  --brand-color:#fff;
   position:relative;
   width:58px;
   height:58px;
@@ -1257,46 +1331,89 @@ a{
   color:#fff;
   box-shadow:0 12px 28px rgba(0,0,0,.16);
   overflow:hidden;
-  transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease, background .35s ease;
+  transition:transform .25s var(--ease), box-shadow .25s ease, border-color .25s ease, background .25s ease;
 }
 
 .social-btn::before{
   content:'';
   position:absolute;
-  inset:-45%;
-  background:radial-gradient(circle, var(--social-glow), transparent 58%);
+  inset:0;
+  background:var(--brand-color);
   opacity:0;
-  transform:scale(.82);
-  transition:opacity .35s ease, transform .35s var(--ease);
+  transition:opacity .25s ease;
+  z-index:0;
 }
 
 .social-btn:hover,
 .social-btn:focus-visible{
-  transform:translateY(-4px) rotate(-4deg) scale(1.06);
-  border-color:rgba(220,236,255,.3);
-  box-shadow:0 18px 44px var(--social-glow);
-  background:rgba(255,255,255,.08);
+  transform:scale(1.12);
+  border-color:var(--brand-color);
+  box-shadow:0 0 20px var(--brand-color);
+  background:rgba(255,255,255,.1);
 }
 
-.social-btn:hover::before,
-.social-btn:focus-visible::before{
-  opacity:1;
-  transform:scale(1);
+.social-btn:hover svg,
+.social-btn:focus-visible svg{
+  color:var(--brand-color);
+  filter:drop-shadow(0 0 8px var(--brand-color));
 }
 
 .social-btn svg{
   position:relative;
   z-index:1;
-  width:22px;
-  height:22px;
+  width:24px;
+  height:24px;
   fill:currentColor;
+  transition:color .25s ease, filter .25s ease;
 }
 
-.social-btn--github{--social-glow:rgba(255,255,255,.2);}
-.social-btn--facebook{--social-glow:rgba(24,119,242,.34);}
-.social-btn--whatsapp{--social-glow:rgba(37,211,102,.34);}
-.social-btn--telegram{--social-glow:rgba(42,171,238,.34);}
-.social-btn--instagram{--social-glow:rgba(225,48,108,.34);}
+.social-btn--github{
+  --brand-color:#ffffff;
+  --social-glow:rgba(255,255,255,.3);
+}
+
+.social-btn--facebook{
+  --brand-color:#1877F2;
+}
+
+.social-btn--whatsapp{
+  --brand-color:#25D366;
+}
+
+.social-btn--telegram{
+  --brand-color:#26A5E4;
+}
+
+.social-btn--instagram{
+  --brand-color:#E4405F;
+}
+
+.social-btn--instagram:hover,
+.social-btn--instagram:focus-visible{
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  border-color: transparent;
+  box-shadow: 0 0 22px rgba(214, 36, 159, 0.6);
+}
+
+.social-btn--instagram:hover svg,
+.social-btn--instagram:focus-visible svg{
+  color: #fff;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.5));
+}
+
+.social-btn--linkedin{
+  --brand-color:#0A66C2;
+}
+
+.social-btn--x{
+  --brand-color:#ffffff;
+}
+
+.social-btn--x:hover,
+.social-btn--x:focus-visible{
+  background: #000;
+  border-color: #fff;
+}
 
 .resume-panel{
   width:min(760px,100%);
@@ -1397,25 +1514,14 @@ a{
   }
 
   .projects-layout{
-    height:auto;
-    min-height:0;
-    display:grid;
-    grid-template-columns:1fr;
-    gap:14px;
-  }
-
-  .projects-layout .project-card{
-    position:relative;
-    top:auto;
-    right:auto;
-    bottom:auto;
-    left:auto;
-    width:100%;
-    transform:none;
+    --project-card-size:clamp(150px,22vw,188px);
+    --project-ring-radius:clamp(126px,26vw,180px);
+    height:min(62vh,620px);
+    min-height:calc((var(--project-ring-radius) * 2) + var(--project-card-size) + 44px);
   }
 
   .project-card--featured{
-    min-height:240px;
+    min-height:auto;
   }
 
   .resume-card{
@@ -1515,6 +1621,36 @@ a{
   .home-hero-image{
     width:min(94vw,520px);
     max-height:66vh;
+  }
+
+  .projects-layout{
+    height:auto;
+    min-height:0;
+    display:grid;
+    grid-template-columns:1fr;
+    justify-items:center;
+    gap:16px;
+  }
+
+  .projects-layout::before,
+  .projects-layout::after{
+    display:none;
+  }
+
+  .projects-layout .project-card{
+    position:relative;
+    left:auto;
+    top:auto;
+    width:min(100%,292px);
+    transform:none;
+  }
+
+  .projects-layout .project-card:hover{
+    transform:translateY(-6px) scale(1.02);
+  }
+
+  .project-card__content{
+    transform:none;
   }
 
   .about-diagram{
@@ -1664,7 +1800,7 @@ a{
 
   <main class="cube-stage">
     <div class="cube">
-      <section class="panel panel-home is-active" data-face="0" aria-label="Home">
+      <section id="home" class="panel panel-home is-active has-revealed" data-face="0" aria-label="Home">
         <div class="home-visual" aria-hidden="true">
           <video autoplay muted loop playsinline preload="auto">
             <source src="welcome.mp4" type="video/mp4" />
@@ -1675,7 +1811,7 @@ a{
         </div>
       </section>
 
-      <section class="panel panel-about" data-face="1" aria-label="About" aria-hidden="true" inert>
+      <section id="about" class="panel panel-about" data-face="1" aria-label="About">
         <div class="face-tag">02 / About</div>
         <div class="section-grid section-grid--about">
           <div class="about-diagram">
@@ -1716,7 +1852,7 @@ a{
         </div>
       </section>
 
-      <section class="panel panel-projects" data-face="2" aria-label="Projects" aria-hidden="true" inert>
+      <section id="projects" class="panel panel-projects" data-face="2" aria-label="Projects">
         <div class="face-tag">03 / Projects</div>
         <div class="section-grid section-grid--projects">
           <div class="section-copy">
@@ -1727,61 +1863,71 @@ a{
 
           <div class="projects-layout">
             <article class="project-card project-card--featured glass-card reveal project-card--orbit-1" style="--delay:300ms">
-              <div class="project-index">01 / Immersive commerce</div>
-              <h3>Aurora Commerce</h3>
-              <p>A cinematic storefront concept with tactile product layers, motion-led navigation, and a calm premium rhythm.</p>
-              <div class="project-tags">
-                <span>Strategy</span>
-                <span>Motion</span>
-                <span>3D Layout</span>
+              <div class="project-card__content">
+                <div class="project-index">01 / Immersive commerce</div>
+                <h3>Aurora Commerce</h3>
+                <p>A cinematic storefront concept with tactile product layers, motion-led navigation, and a calm premium rhythm.</p>
+                <div class="project-tags">
+                  <span>Strategy</span>
+                  <span>Motion</span>
+                  <span>3D Layout</span>
+                </div>
               </div>
             </article>
 
             <article class="project-card glass-card reveal project-card--orbit-2" style="--delay:380ms">
-              <div class="project-index">02 / Design system</div>
-              <h3>Studio OS</h3>
-              <p>A workspace interface for products that need clarity, hierarchy, and a glass-first aesthetic.</p>
-              <div class="project-tags">
-                <span>UI</span>
-                <span>Systems</span>
+              <div class="project-card__content">
+                <div class="project-index">02 / Design system</div>
+                <h3>Studio OS</h3>
+                <p>A workspace interface for products that need clarity, hierarchy, and a glass-first aesthetic.</p>
+                <div class="project-tags">
+                  <span>UI</span>
+                  <span>Systems</span>
+                </div>
               </div>
             </article>
 
             <article class="project-card glass-card reveal project-card--orbit-3" style="--delay:440ms">
-              <div class="project-index">03 / Launch page</div>
-              <h3>Noir Launch</h3>
-              <p>A teaser experience built around video, light, and measured transitions for high-end product storytelling.</p>
-              <div class="project-tags">
-                <span>Launch</span>
-                <span>Motion</span>
+              <div class="project-card__content">
+                <div class="project-index">03 / Launch page</div>
+                <h3>Noir Launch</h3>
+                <p>A teaser experience built around video, light, and measured transitions for high-end product storytelling.</p>
+                <div class="project-tags">
+                  <span>Launch</span>
+                  <span>Motion</span>
+                </div>
               </div>
             </article>
 
             <article class="project-card glass-card reveal project-card--orbit-4" style="--delay:500ms">
-              <div class="project-index">04 / Product narrative</div>
-              <h3>Atlas Grid</h3>
-              <p>An angular visual system that balances technical precision with soft cinematic depth.</p>
-              <div class="project-tags">
-                <span>UX</span>
-                <span>Motion</span>
-                <span>Systems</span>
+              <div class="project-card__content">
+                <div class="project-index">04 / Product narrative</div>
+                <h3>Atlas Grid</h3>
+                <p>An angular visual system that balances technical precision with soft cinematic depth.</p>
+                <div class="project-tags">
+                  <span>UX</span>
+                  <span>Motion</span>
+                  <span>Systems</span>
+                </div>
               </div>
             </article>
 
             <article class="project-card glass-card reveal project-card--orbit-5" style="--delay:560ms">
-              <div class="project-index">05 / Brand story</div>
-              <h3>Lumen Case</h3>
-              <p>A polished case-study layout with luminous pacing and a quiet luxury presentation.</p>
-              <div class="project-tags">
-                <span>Brand</span>
-                <span>Editorial</span>
+              <div class="project-card__content">
+                <div class="project-index">05 / Brand story</div>
+                <h3>Lumen Case</h3>
+                <p>A polished case-study layout with luminous pacing and a quiet luxury presentation.</p>
+                <div class="project-tags">
+                  <span>Brand</span>
+                  <span>Editorial</span>
+                </div>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="panel panel-certificates" data-face="3" aria-label="Certificates" aria-hidden="true" inert>
+      <section id="certificates" class="panel panel-certificates" data-face="3" aria-label="Certificates">
         <div class="face-tag">04 / Certificates</div>
         <div class="section-grid section-grid--certificates">
           <div class="section-copy">
@@ -1836,7 +1982,7 @@ a{
         </div>
       </section>
 
-      <section class="panel panel-contact" data-face="4" aria-label="Contact" aria-hidden="true" inert>
+      <section id="contact" class="panel panel-contact" data-face="4" aria-label="Contact">
         <div class="face-tag">05 / Contact</div>
         <div class="section-grid section-grid--contact">
           <div class="contact-hub-layout">
@@ -1861,6 +2007,16 @@ a{
               <a class="social-btn social-btn--github" href="https://github.com/zidan" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" title="GitHub">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path d="M12 .5A11.5 11.5 0 0 0 8.36 22.9c.58.11.79-.25.79-.56v-2.17c-3.2.7-3.88-1.38-3.88-1.38-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.17 1.18a10.9 10.9 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.25 5.69.41.35.78 1.05.78 2.12v3.14c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z" />
+                </svg>
+              </a>
+              <a class="social-btn social-btn--linkedin" href="https://linkedin.com/in/zidan" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                </svg>
+              </a>
+              <a class="social-btn social-btn--x" href="https://x.com/zidan" target="_blank" rel="noopener noreferrer" aria-label="X profile" title="X">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.292 19.49h2.039L6.486 3.24H4.298l13.311 17.403z"/>
                 </svg>
               </a>
               <a class="social-btn social-btn--facebook" href="https://www.facebook.com/zidan" target="_blank" rel="noopener noreferrer" aria-label="Facebook profile" title="Facebook">
@@ -1888,7 +2044,7 @@ a{
         </div>
       </section>
 
-      <section class="panel panel-resume" data-face="5" aria-label="Resume" aria-hidden="true" inert>
+      <section id="resume" class="panel panel-resume" data-face="5" aria-label="Resume">
         <div class="face-tag">06 / Resume</div>
         <div class="section-grid section-grid--resume">
           <div class="resume-panel">
@@ -1915,16 +2071,13 @@ const heroButtons = [...document.querySelectorAll('[data-target]')];
 const root = document.documentElement;
 const nav = document.querySelector('.nav');
 const indicator = document.querySelector('.nav-indicator');
+const sceneShell = document.querySelector('.scene-shell');
 
 let currentIndex = 0;
-let locked = false;
-let unlockTimer = 0;
-let touchStartX = 0;
-let touchStartY = 0;
-let touchActive = false;
-let wheelLocked = false;
-let wheelUnlockTimer = 0;
+let isScrollLocked = false;
+let scrollLockTimer = null;
 const baseMotionDuration = 420;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function setMotionDurations(duration){
   const value = `${duration}ms`;
@@ -1932,17 +2085,8 @@ function setMotionDurations(duration){
   root.style.setProperty('--nav-motion-ms', value);
 }
 
-function clamp(value, min, max){
-  return Math.min(max, Math.max(min, value));
-}
-
 function getActiveNavButton(){
   return navButtons.find(button => Number(button.dataset.index) === currentIndex);
-}
-
-function clearWheelLock(){
-  wheelLocked = false;
-  window.clearTimeout(wheelUnlockTimer);
 }
 
 function syncNavIndicator(){
@@ -1952,124 +2096,107 @@ function syncNavIndicator(){
     return;
   }
   const indicatorLeft = parseFloat(getComputedStyle(indicator).left) || 0;
-  const buttonRect = activeButton.getBoundingClientRect();
   indicator.style.opacity = '1';
-  indicator.style.width = `${buttonRect.width}px`;
+  indicator.style.width = `${activeButton.offsetWidth}px`;
   indicator.style.transform = `translateX(${activeButton.offsetLeft - indicatorLeft}px)`;
-  activeButton.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  const targetScroll = activeButton.offsetLeft - nav.clientWidth / 2 + activeButton.offsetWidth / 2;
+  nav.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
 }
 
-function setActive(index, motion = {}){
-  const nextIndex = (index + panels.length) % panels.length;
-  if(locked || nextIndex === currentIndex) return;
-
-  const duration = clamp(motion.duration ?? baseMotionDuration, 300, 600);
-  setMotionDurations(duration);
-  locked = true;
-  window.clearTimeout(unlockTimer);
-  currentIndex = nextIndex;
+function setActiveIndex(index){
+  if(index === currentIndex) return;
+  currentIndex = index;
 
   panels.forEach((panel, i) => {
     const active = i === currentIndex;
     panel.classList.toggle('is-active', active);
-    panel.setAttribute('aria-hidden', active ? 'false' : 'true');
-    panel.inert = !active;
+    if(active) panel.classList.add('has-revealed');
   });
 
-  navButtons.forEach((button, i) => {
+  navButtons.forEach(button => {
     const active = Number(button.dataset.index) === currentIndex;
     button.classList.toggle('is-active', active);
     if(active) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
   });
-  navCta?.classList.toggle('is-highlighted', currentIndex === panels.length - 1);
 
-  requestAnimationFrame(syncNavIndicator);
-  unlockTimer = window.setTimeout(() => {
-    locked = false;
-  }, duration);
+  navCta?.classList.toggle('is-highlighted', currentIndex === panels.length - 1);
+  syncNavIndicator();
+}
+
+function scrollToPanel(index){
+  const target = panels[index];
+  if(!target || index === currentIndex) return;
+
+  isScrollLocked = true;
+  if(scrollLockTimer) clearTimeout(scrollLockTimer);
+  scrollLockTimer = setTimeout(() => {
+    isScrollLocked = false;
+    scrollLockTimer = null;
+  }, 1000);
+
+  setActiveIndex(index);
+  target.scrollIntoView({
+    behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
+    block: 'start'
+  });
+}
+
+function updateActiveFromScroll(){
+  if(isScrollLocked) return;
+
+  const viewportCenter = window.innerHeight / 2;
+  let bestIndex = currentIndex;
+  let bestDistance = Infinity;
+
+  panels.forEach(panel => {
+    const rect = panel.getBoundingClientRect();
+    if(rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+    const panelCenter = rect.top + rect.height / 2;
+    const distance = Math.abs(panelCenter - viewportCenter);
+    if(distance < bestDistance){
+      bestDistance = distance;
+      bestIndex = Number(panel.dataset.face ?? 0);
+    }
+  });
+
+  if(bestIndex !== currentIndex) setActiveIndex(bestIndex);
+}
+
+function onScroll(){
+  syncNavIndicator();
+  updateActiveFromScroll();
 }
 
 navButtons.forEach(button => {
   button.addEventListener('click', () => {
-    clearWheelLock();
-    setActive(Number(button.dataset.index));
+    scrollToPanel(Number(button.dataset.index));
   });
 });
 
 heroButtons.forEach(button => {
   button.addEventListener('click', () => {
-    clearWheelLock();
-    setActive(Number(button.dataset.target));
+    scrollToPanel(Number(button.dataset.target));
   });
 });
 
-window.addEventListener('wheel', event => {
-  event.preventDefault();
-  const direction = Math.sign(event.deltaY);
-  if(!direction) return;
+sceneShell.addEventListener('scroll', onScroll, { passive: true });
 
-  window.clearTimeout(wheelUnlockTimer);
-  wheelUnlockTimer = window.setTimeout(() => {
-    wheelLocked = false;
-  }, 260);
-
-  if(locked || wheelLocked) return;
-  wheelLocked = true;
-  setActive(currentIndex + (direction > 0 ? 1 : -1), { duration: baseMotionDuration });
-}, { passive:false });
-
-window.addEventListener('keydown', event => {
-  if(locked) return;
-  if(event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'PageDown'){
-    event.preventDefault();
-    clearWheelLock();
-    setActive(currentIndex + 1);
-  }else if(event.key === 'ArrowLeft' || event.key === 'ArrowUp' || event.key === 'PageUp'){
-    event.preventDefault();
-    clearWheelLock();
-    setActive(currentIndex - 1);
-  }else if(event.key === 'Home'){
-    event.preventDefault();
-    clearWheelLock();
-    setActive(0);
-  }else if(event.key === 'End'){
-    event.preventDefault();
-    clearWheelLock();
-    setActive(panels.length - 1);
-  }
-});
-
-window.addEventListener('touchstart', event => {
-  const touch = event.touches[0];
-  touchActive = true;
-  touchStartX = touch.clientX;
-  touchStartY = touch.clientY;
-}, { passive:true });
-
-window.addEventListener('touchend', event => {
-  if(!touchActive || locked) return;
-  const touch = event.changedTouches[0];
-  const dx = touch.clientX - touchStartX;
-  const dy = touch.clientY - touchStartY;
-  touchActive = false;
-
-  if(Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
-  clearWheelLock();
-  setActive(currentIndex + (dx < 0 ? 1 : -1), { duration: 420 });
-}, { passive:true });
+if('onscrollend' in window){
+  sceneShell.addEventListener('scrollend', () => {
+    updateActiveFromScroll();
+    syncNavIndicator();
+  });
+}
 
 window.addEventListener('resize', syncNavIndicator);
-window.addEventListener('load', syncNavIndicator);
-
-panels.forEach((panel, i) => {
-  const active = i === currentIndex;
-  panel.setAttribute('aria-hidden', active ? 'false' : 'true');
-  panel.inert = !active;
+window.addEventListener('load', () => {
+  updateActiveFromScroll();
+  syncNavIndicator();
 });
 
 setMotionDurations(baseMotionDuration);
-requestAnimationFrame(syncNavIndicator);
+setActiveIndex(currentIndex);
 </script>
 </body>
 </html>
