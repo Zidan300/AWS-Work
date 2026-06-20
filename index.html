@@ -305,6 +305,26 @@ a{
   border:0;
 }
 
+.home-center{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  display:grid;
+  place-items:center;
+  pointer-events:none;
+  padding:clamp(20px,4vw,56px);
+}
+
+.home-hero-image{
+  display:block;
+  width:min(58vw,520px);
+  max-width:88vw;
+  height:auto;
+  max-height:68vh;
+  filter:drop-shadow(0 14px 28px rgba(156,201,255,.14)) drop-shadow(0 28px 70px rgba(0,0,0,.36));
+  transform:translateZ(0);
+}
+
 .home-copy{
   position:absolute;
   left:clamp(18px,4vw,60px);
@@ -408,6 +428,198 @@ a{
   letter-spacing:.18em;
 }
 
+.about-diagram{
+  position:relative;
+  width:min(1180px,100%);
+  height:min(76vh,760px);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(140px,1fr) minmax(280px,420px) minmax(140px,1fr);
+  grid-template-rows:minmax(120px,1fr) minmax(260px,1.1fr) minmax(120px,1fr);
+  gap:clamp(12px,2vw,28px);
+  align-items:center;
+}
+
+.about-visual-wrap{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:2;
+  width:min(36vw,420px);
+  max-width:420px;
+  transform:translate(-50%,-50%);
+}
+
+.about-visual-wrap::before{
+  content:'';
+  position:absolute;
+  inset:-14%;
+  z-index:-1;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(156,201,255,.14), transparent 66%);
+  filter:blur(14px);
+}
+
+.about-main-image{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:64vh;
+  object-fit:contain;
+  filter:drop-shadow(0 24px 56px rgba(0,0,0,.34));
+}
+
+.about-callout{
+  position:absolute;
+  width:min(240px,24vw);
+  padding:14px 16px 14px 18px;
+  border-radius:22px;
+  z-index:3;
+  overflow:visible;
+}
+
+.about-callout::before{
+  content:'';
+  position:absolute;
+  height:1px;
+  background:linear-gradient(90deg, rgba(156,201,255,0), rgba(156,201,255,.72), rgba(255,255,255,.36));
+  pointer-events:none;
+}
+
+.about-callout::after{
+  content:'';
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#dcecff;
+  box-shadow:0 0 18px rgba(156,201,255,.55);
+  pointer-events:none;
+}
+
+.about-callout strong{
+  display:block;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-size:.72rem;
+  color:#fff;
+}
+
+.about-callout p{
+  margin-top:8px;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:.92rem;
+}
+
+.about-callout--tl{
+  top:8%;
+  left:0;
+}
+
+.about-callout--tl::before{
+  right:-84px;
+  bottom:22px;
+  width:84px;
+  transform:rotate(28deg);
+  transform-origin:right center;
+}
+
+.about-callout--tl::after{
+  right:-88px;
+  bottom:18px;
+}
+
+.about-callout--tr{
+  top:8%;
+  right:0;
+}
+
+.about-callout--tr::before{
+  left:-84px;
+  bottom:22px;
+  width:84px;
+  transform:rotate(-28deg);
+  transform-origin:left center;
+}
+
+.about-callout--tr::after{
+  left:-88px;
+  bottom:18px;
+}
+
+.about-callout--ml{
+  top:42%;
+  left:0;
+  transform:translateY(-50%);
+}
+
+.about-callout--ml::before{
+  right:-96px;
+  top:50%;
+  width:96px;
+  transform:translateY(-50%);
+}
+
+.about-callout--ml::after{
+  right:-100px;
+  top:calc(50% - 4px);
+}
+
+.about-callout--mr{
+  top:42%;
+  right:0;
+  transform:translateY(-50%);
+}
+
+.about-callout--mr::before{
+  left:-96px;
+  top:50%;
+  width:96px;
+  transform:translateY(-50%);
+}
+
+.about-callout--mr::after{
+  left:-100px;
+  top:calc(50% - 4px);
+}
+
+.about-callout--bl{
+  bottom:8%;
+  left:4%;
+}
+
+.about-callout--bl::before{
+  right:-84px;
+  top:26px;
+  width:84px;
+  transform:rotate(-28deg);
+  transform-origin:right center;
+}
+
+.about-callout--bl::after{
+  right:-88px;
+  top:22px;
+}
+
+.about-callout--br{
+  bottom:8%;
+  right:4%;
+}
+
+.about-callout--br::before{
+  left:-84px;
+  top:26px;
+  width:84px;
+  transform:rotate(28deg);
+  transform-origin:left center;
+}
+
+.about-callout--br::after{
+  left:-88px;
+  top:22px;
+}
+
 .section-grid{
   width:min(1180px,100%);
   height:100%;
@@ -418,8 +630,9 @@ a{
 }
 
 .section-grid--about{
-  grid-template-columns:minmax(280px,380px) minmax(0,1fr);
+  grid-template-columns:1fr;
   align-items:center;
+  justify-items:center;
 }
 
 .section-grid--projects{
@@ -663,6 +876,11 @@ a{
     padding-top:88px;
   }
 
+  .home-hero-image{
+    width:min(66vw,430px);
+    max-height:60vh;
+  }
+
   .section-grid--about,
   .section-grid--projects,
   .section-grid--contact{
@@ -697,6 +915,27 @@ a{
   }
 }
 
+@media (max-width: 1100px) and (min-width: 821px){
+  .about-diagram{
+    grid-template-columns:minmax(120px,1fr) minmax(260px,360px) minmax(120px,1fr);
+    grid-template-rows:minmax(100px,1fr) minmax(240px,1fr) minmax(100px,1fr);
+    height:min(72vh,700px);
+  }
+
+  .about-visual-wrap{
+    width:min(32vw,360px);
+  }
+
+  .about-callout{
+    width:min(220px,24vw);
+  }
+
+  .about-callout--bl,
+  .about-callout--br{
+    display:none;
+  }
+}
+
 @media (max-width: 640px){
   .nav-shell{
     top:14px;
@@ -726,34 +965,56 @@ a{
     padding-top:76px;
   }
 
-  .home-copy{
-    padding:18px;
-    bottom:88px;
+  .home-hero-image{
+    width:min(78vw,330px);
+    max-height:52vh;
   }
 
-  .home-title{
-    font-size:clamp(1.9rem,8vw,2.8rem);
+  .about-diagram{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    height:auto;
+    min-height:0;
+    gap:8px;
+    padding-bottom:18px;
   }
 
-  .home-copy p,
-  .section-lead{
-    font-size:.98rem;
+  .about-visual-wrap{
+    position:relative;
+    left:auto;
+    top:auto;
+    transform:none;
+    width:min(76vw,300px);
+    max-width:300px;
   }
 
-  .section-title{
-    font-size:clamp(2.1rem,10vw,3.3rem);
+  .about-callout{
+    position:static;
+    width:min(100%,520px);
+    max-width:520px;
+    padding:12px 14px;
+    transform:none;
   }
 
-  .portrait-frame{
-    min-height:300px;
+  .about-callout::before,
+  .about-callout::after{
+    display:none;
   }
 
-  .project-card h3{
-    font-size:1.35rem;
+  .about-callout--bl,
+  .about-callout--br{
+    display:none;
   }
 
-  .contact-email{
-    font-size:1.45rem;
+  .about-callout p{
+    display:none;
+  }
+
+  .home-copy,
+  .home-hint{
+    display:none;
   }
 }
 
@@ -785,86 +1046,53 @@ a{
   <main class="cube-stage">
     <div class="cube">
       <section class="panel panel-home is-active" data-face="0" aria-label="Home">
-        <div class="face-tag">01 / Home</div>
         <div class="home-visual" aria-hidden="true">
           <video autoplay muted loop playsinline preload="auto">
             <source src="welcome.mp4" type="video/mp4" />
           </video>
         </div>
-        <div class="home-copy reveal" style="--delay:120ms">
-          <div class="home-eyebrow">Luxury Motion / Spatial UI</div>
-          <h1 class="home-title">Luxury digital experiences shaped by motion and glass.</h1>
-          <p>Fullscreen video dominates the frame while the rest of the studio unfolds as polished workspace faces.</p>
-          <div class="home-actions">
-            <button type="button" class="action-btn action-btn--solid" data-target="1">Explore About</button>
-            <button type="button" class="action-btn action-btn--ghost" data-target="2">View Projects</button>
-          </div>
+        <div class="home-center reveal" style="--delay:120ms">
+          <img class="home-hero-image" src="welcome.png" alt="Welcome hero artwork" loading="eager" decoding="async" />
         </div>
-        <div class="home-hint reveal" style="--delay:220ms">Scroll or use the nav to switch spaces</div>
       </section>
 
       <section class="panel panel-about" data-face="1" aria-label="About" aria-hidden="true" inert>
         <div class="face-tag">02 / About</div>
         <div class="section-grid section-grid--about">
-          <article class="portrait-card glass-card reveal" style="--delay:120ms">
-            <div class="portrait-frame">
-              <svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stylized profile portrait">
-                <defs>
-                  <linearGradient id="about-bg" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#eef6ff" />
-                    <stop offset="40%" stop-color="#bfd7ff" />
-                    <stop offset="100%" stop-color="#5d7fb1" />
-                  </linearGradient>
-                  <radialGradient id="about-glow" cx="35%" cy="28%" r="55%">
-                    <stop offset="0%" stop-color="#ffffff" stop-opacity=".95" />
-                    <stop offset="45%" stop-color="#cfe4ff" stop-opacity=".64" />
-                    <stop offset="100%" stop-color="#cfe4ff" stop-opacity="0" />
-                  </radialGradient>
-                  <linearGradient id="about-skin" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#ffffff" />
-                    <stop offset="100%" stop-color="#d8e7ff" />
-                  </linearGradient>
-                  <linearGradient id="about-suit" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#14223a" />
-                    <stop offset="100%" stop-color="#0a1220" />
-                  </linearGradient>
-                </defs>
-                <rect width="600" height="760" rx="36" fill="url(#about-bg)" />
-                <circle cx="146" cy="146" r="136" fill="url(#about-glow)" />
-                <circle cx="468" cy="610" r="176" fill="#ffffff" fill-opacity=".16" />
-                <path d="M300 160c55 0 100 45 100 100s-45 100-100 100-100-45-100-100 45-100 100-100z" fill="url(#about-skin)" />
-                <path d="M168 566c24-80 79-126 132-126h0c53 0 108 46 132 126 10 34-13 68-48 68H216c-35 0-58-34-48-68z" fill="url(#about-suit)" />
-                <path d="M226 324c26 18 90 22 148 0 0 0 18 61 18 99 0 58-38 96-92 96s-92-38-92-96c0-38 18-99 18-99z" fill="url(#about-skin)" />
-                <path d="M252 254c6-22 24-38 48-38s42 16 48 38" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="10" stroke-linecap="round" />
-                <path d="M208 392c32 22 66 32 92 32s61-10 92-32" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="8" stroke-linecap="round" />
-                <rect x="0.5" y="0.5" width="599" height="759" rx="35.5" fill="none" stroke="rgba(255,255,255,.46)" />
-              </svg>
+          <div class="about-diagram">
+            <div class="about-visual-wrap reveal" style="--delay:120ms">
+              <img class="about-main-image" src="zidan1.png" alt="Annotated portrait of Zidan" loading="eager" decoding="async" />
             </div>
-            <div class="portrait-caption">
-              <strong>Studio Profile</strong>
-              <span>Glass portrait frame with a luminous, editorial finish.</span>
-            </div>
-          </article>
 
-          <div class="section-copy">
-            <div class="section-eyebrow reveal" style="--delay:140ms">What I do</div>
-            <h2 class="section-title reveal" style="--delay:200ms">I design calm, cinematic interfaces.</h2>
-            <p class="section-lead reveal" style="--delay:260ms">I build premium digital experiences that feel tactile, spatial, and effortless - blending motion, interface systems, and refined storytelling into one cohesive surface.</p>
+            <article class="about-callout glass-card reveal about-callout--tl" style="--delay:170ms">
+              <strong>Light / framing</strong>
+              <p>Soft edge light keeps the subject floating cleanly.</p>
+            </article>
 
-            <div class="mini-grid">
-              <article class="mini-card glass-card reveal" style="--delay:320ms">
-                <strong>Motion First</strong>
-                <p>Transitions feel deliberate, spatial, and tuned for clarity rather than noise.</p>
-              </article>
-              <article class="mini-card glass-card reveal" style="--delay:380ms">
-                <strong>Glass Systems</strong>
-                <p>Soft translucency, sharp typography, and structured depth shape the visual language.</p>
-              </article>
-              <article class="mini-card glass-card reveal" style="--delay:440ms">
-                <strong>Cinematic Pacing</strong>
-                <p>Every screen is built like a scene so the experience always feels composed.</p>
-              </article>
-            </div>
+            <article class="about-callout glass-card reveal about-callout--tr" style="--delay:210ms">
+              <strong>Composition / balance</strong>
+              <p>Measured spacing preserves a calm editorial rhythm.</p>
+            </article>
+
+            <article class="about-callout glass-card reveal about-callout--ml" style="--delay:250ms">
+              <strong>Depth / layering</strong>
+              <p>Subtle contrast adds a technical diagram feel.</p>
+            </article>
+
+            <article class="about-callout glass-card reveal about-callout--mr" style="--delay:290ms">
+              <strong>Focus / identity</strong>
+              <p>The center stays restrained and unmistakable.</p>
+            </article>
+
+            <article class="about-callout glass-card reveal about-callout--bl" style="--delay:330ms">
+              <strong>Texture / finish</strong>
+              <p>Luxury surface treatment with a clean, polished read.</p>
+            </article>
+
+            <article class="about-callout glass-card reveal about-callout--br" style="--delay:370ms">
+              <strong>Presence / rhythm</strong>
+              <p>A measured cadence anchors the whole composition.</p>
+            </article>
           </div>
         </div>
       </section>
