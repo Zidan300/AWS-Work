@@ -31,7 +31,7 @@ position:fixed;
 top:25px;
 left:50%;
 transform:translateX(-50%);
-padding:14px 18px;
+padding:8px 14px;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -55,15 +55,16 @@ nav a{
 text-decoration:none;
 color:#111827;
 font-weight:500;
-padding:12px 22px;
+padding:8px 16px;
 border-radius:999px;
 transition:.35s;
+font-size:14px;
 }
 
 nav a:hover{
-background:rgba(255,255,255,.55);
-transform:translateY(-2px);
-box-shadow:0 8px 25px rgba(88,166,255,.12);
+background:rgba(255,255,255,.65);
+transform:translateY(-3px) scale(1.08);
+box-shadow:0 10px 30px rgba(88,166,255,.18);
 }
 section{
 min-height:100vh;
@@ -204,8 +205,9 @@ border-radius:20px;
 
 .home-video.morph-out{
 opacity:0;
-transform:scale(1.25) rotate(4deg);
-filter:blur(20px);
+transform:none;
+filter:blur(26px);
+transition:opacity .9s ease, filter .9s ease;
 }
 
 .home-video::before,
@@ -231,9 +233,88 @@ filter:blur(20px);
   background:radial-gradient(circle, rgba(255,123,199,.35), transparent 70%);
 }
 
+.about-wrapper{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:80px;
+max-width:1200px;
+width:100%;
+opacity:0;
+filter:blur(18px);
+transition:opacity 1s ease, filter 1s ease;
+}
+
+.about-wrapper.active{
+opacity:1;
+filter:blur(0px);
+}
+
+.about-photo-ring{
+width:340px;
+height:340px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:conic-gradient(from 0deg,#5aa7ff,#ff7bc7,#57dca3,#5aa7ff);
+animation:spinRing 18s linear infinite;
+padding:4px;
+box-shadow:
+0 0 60px rgba(90,167,255,.25),
+0 0 100px rgba(255,123,199,.12);
+}
+
+.about-photo-placeholder{
+width:100%;
+height:100%;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(255,255,255,.18);
+backdrop-filter:blur(24px);
+border:1px solid rgba(255,255,255,.35);
+font-weight:600;
+letter-spacing:1px;
+}
+
+.about-content{
+max-width:550px;
+}
+
+.about-content h2{
+font-size:clamp(2.8rem,5vw,4.5rem);
+margin-bottom:20px;
+background:linear-gradient(90deg,#5aa7ff,#ff7bc7,#57dca3);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.about-content p{
+font-size:1.08rem;
+line-height:1.9;
+opacity:.82;
+}
+
+@keyframes spinRing{
+from{transform:rotate(0deg)}
+to{transform:rotate(360deg)}
+}
+
 @media(max-width:768px){
 nav ul{display:none}
 .hero h1{font-size:3.5rem}
+.about-wrapper{
+flex-direction:column;
+gap:40px;
+padding:0 24px;
+text-align:center;
+}
+.about-photo-ring{
+width:260px;
+height:260px;
+}
 }
 </style>
 </head>
@@ -259,7 +340,25 @@ nav ul{display:none}
     </video>
   </div>
 </section>
-<section class="face face-2"></section>
+<section class="face face-2">
+  <div class="about-wrapper">
+    <div class="about-photo-ring">
+      <div class="about-photo-placeholder">
+        <span>Your Photo</span>
+      </div>
+    </div>
+
+    <div class="about-content">
+      <h2>About Me</h2>
+      <p>
+        Creative developer focused on immersive digital experiences,
+        elegant interfaces, and premium visual design. Combining
+        aesthetics, motion, and functionality to create memorable
+        interactions that feel refined and modern.
+      </p>
+    </div>
+  </div>
+</section>
 <section class="face face-3"></section>
 <section class="face face-4"></section>
 </div>
@@ -277,37 +376,59 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 const welcomeBox = document.querySelector('.home-video');
+const cube = document.getElementById('cube');
+const aboutWrapper = document.querySelector('.about-wrapper');
+let currentFace = 0;
 
 let hidden = false;
 let animating = false;
 
 window.addEventListener('wheel', (e) => {
   if (animating) return;
-
   if (Math.abs(e.deltaY) < 10) return;
 
-  // Scroll Down → Morph Out
-  if (e.deltaY > 0 && !hidden) {
+  if (e.deltaY > 0 && currentFace === 0) {
     animating = true;
     hidden = true;
+    currentFace = 1;
 
     welcomeBox.classList.add('morph-out');
 
     setTimeout(() => {
+      cube.style.transition = 'transform 1.2s cubic-bezier(.22,1,.36,1)';
+      cube.style.transform = 'rotateX(90deg)';
+      setTimeout(() => {
+        if (aboutWrapper) {
+          aboutWrapper.classList.add('active');
+        }
+      }, 600);
+    }, 450);
+
+    if (aboutWrapper) {
+      aboutWrapper.classList.remove('active');
+      void aboutWrapper.offsetWidth;
+      setTimeout(() => {
+        aboutWrapper.classList.add('active');
+      }, 350);
+    }
+
+    setTimeout(() => {
       animating = false;
-    }, 900);
+    }, 1200);
   }
 
-  // Scroll Up → Morph Back In
-  if (e.deltaY < 0 && hidden) {
+  if (e.deltaY < 0 && currentFace === 1) {
     animating = true;
     hidden = false;
+    currentFace = 0;
 
+    cube.style.transition = 'transform 1.2s cubic-bezier(.22,1,.36,1)';
+    cube.style.transform = 'rotateX(0deg)';
     welcomeBox.classList.remove('morph-out');
 
     setTimeout(() => {
       animating = false;
-    }, 900);
+    }, 1200);
   }
 }, { passive: true });
 </script>
