@@ -1,306 +1,1072 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#03050a" />
 <title>Luxury Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;scroll-behavior:smooth}
-
-body{
-background:linear-gradient(135deg,#f9fbff,#fff6fd,#f4fff8);
-color:#111827;
-overflow-x:hidden;
+:root{
+  --bg:#03050a;
+  --panel-bg:#060912;
+  --text:#f5f8ff;
+  --muted:rgba(232,240,252,.74);
+  --line:rgba(255,255,255,.14);
+  --glass:rgba(255,255,255,.08);
+  --glass-strong:rgba(255,255,255,.14);
+  --accent:#9cc9ff;
+  --accent-soft:#dcecff;
+  --shadow:0 28px 90px rgba(0,0,0,.34);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --panel-depth:clamp(240px,36vmin,560px);
 }
 
-.hero-bg{
-position:fixed;
-inset:0;
-z-index:-1;
-background:
-radial-gradient(circle at 20% 20%,rgba(88,166,255,.18),transparent 30%),
-radial-gradient(circle at 80% 30%,rgba(90,167,255,.18),transparent 30%),
-radial-gradient(circle at 50% 80%,rgba(90,167,255,.12),transparent 30%);
-filter:blur(50px);
-animation:floatbg 12s ease-in-out infinite alternate;
-}
-
-@keyframes floatbg{
-100%{transform:scale(1.2) translateY(-30px)}
-}
-
-nav{
-position:fixed;
-top:25px;
-left:50%;
-transform:translateX(-50%);
-padding:14px 28px;
-display:flex;
-justify-content:center;
-align-items:center;
-backdrop-filter:blur(30px);
-background:rgba(255,255,255,.22);
-border:1px solid rgba(255,255,255,.45);
-border-radius:999px;
-box-shadow:0 10px 40px rgba(0,0,0,.06);
-z-index:1000;
-}
-
-nav ul{
-display:flex;
-gap:20px;
-list-style:none;
-align-items:center;
-}
-
-nav a{
-text-decoration:none;
-color:#111827;
-font-weight:600;
-padding:8px 16px;
-border-radius:999px;
-transition:.35s;
-font-size:16px;
-}
-
-nav a:hover{
-background:rgba(255,255,255,.65);
-transform:translateY(-3px) scale(1.08);
-box-shadow:0 10px 30px rgba(88,166,255,.18);
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 html,body{
-height:100%;
-overflow:hidden;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
 }
 
-.cube-scene{
-position:fixed;
-inset:0;
-perspective:3200px;
-overflow:hidden;
+body{
+  position:relative;
+  isolation:isolate;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 14% 16%, rgba(156,201,255,.18), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(255,255,255,.10), transparent 24%),
+    radial-gradient(circle at 50% 84%, rgba(112,162,255,.12), transparent 32%),
+    linear-gradient(135deg, #02040a 0%, #050810 45%, #09111f 100%);
+}
+
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:.08;
+  background-image:
+    linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px);
+  background-size:3px 3px;
+  mix-blend-mode:soft-light;
+}
+
+button,
+a{
+  font:inherit;
+}
+
+button{
+  border:0;
+  background:none;
+  color:inherit;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.scene-shell{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  perspective:2400px;
+  overflow:hidden;
+}
+
+.nav-shell{
+  position:fixed;
+  top:24px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20;
+  width:min(640px,calc(100vw - 24px));
+}
+
+.nav{
+  position:relative;
+  display:flex;
+  gap:8px;
+  padding:8px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:rgba(8,14,24,.46);
+  backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:0 20px 55px rgba(0,0,0,.18);
+  overflow:hidden;
+}
+
+.nav-indicator{
+  position:absolute;
+  top:8px;
+  left:8px;
+  bottom:8px;
+  width:92px;
+  border-radius:999px;
+  background:linear-gradient(135deg, rgba(228,240,255,.92), rgba(166,205,255,.88));
+  box-shadow:0 12px 26px rgba(156,201,255,.28);
+  transform:translateX(0);
+  transition:transform .8s var(--ease), width .8s var(--ease), opacity .3s ease;
+  pointer-events:none;
+}
+
+.nav-btn{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  flex:1;
+  align-items:center;
+  justify-content:center;
+  min-width:86px;
+  padding:12px 16px;
+  border-radius:999px;
+  color:rgba(240,245,252,.82);
+  font-weight:600;
+  letter-spacing:.02em;
+  cursor:pointer;
+  transition:transform .35s var(--ease), color .35s ease, opacity .35s ease;
+}
+
+.nav-btn:hover,
+.nav-btn:focus-visible{
+  transform:translateY(-1px);
+  color:#fff;
+}
+
+.nav-btn.is-active{
+  color:#07111e;
+}
+
+.nav-btn:focus-visible{
+  outline:2px solid rgba(156,201,255,.55);
+  outline-offset:4px;
+}
+
+.cube-stage{
+  position:absolute;
+  inset:0;
+  perspective:none;
+  overflow:hidden;
 }
 
 .cube{
-position:absolute;
-width:100%;
-height:100%;
-transform-style:preserve-3d;
+  position:absolute;
+  inset:0;
+  transform:none;
+  transition:none;
+  will-change:auto;
 }
 
-.face{
-position:absolute;
-width:100vw;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-padding-top:90px;
-opacity:0;
-transition:opacity .6s ease, transform .6s ease;
-border-radius:28px;
-margin:18px;
-width:calc(100vw - 36px);
-height:calc(100vh - 36px);
-box-shadow:0 25px 80px rgba(0,0,0,.10);
-transform:scale(.98) translateY(20px);
-background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+.panel{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
+  transform:scale(.98);
+  filter:blur(8px);
+  transform-origin:center center;
+  transition:opacity 420ms var(--ease), transform 420ms var(--ease), filter 420ms ease;
+  will-change:opacity, transform, filter;
+  padding:clamp(92px,8vh,126px) clamp(18px,4vw,64px) clamp(20px,3vw,36px);
 }
 
-.face.active{
-opacity:1;
-transform:scale(1) translateY(0);
-z-index:2;
+.panel.is-active{
+  opacity:1;
+  pointer-events:auto;
+  transform:scale(1);
+  filter:blur(0);
+  z-index:3;
 }
 
-.face-1{
-background:#ffffff;
-margin:0;
-width:100vw;
-height:100vh;
-border-radius:0;
-box-shadow:none;
-}
-.face-2{background:transparent;}
-.face-3{background:transparent;}
-.face-4{background:transparent;}
-
-.home-video{
-position:absolute;
-inset:0;
-padding:18px;
-box-sizing:border-box;
-}
-.face-1 .home-video{
-padding:0;
+.panel > *{
+  position:relative;
+  z-index:1;
 }
 
-.home-video video{
-width:100%;
-height:100%;
-object-fit:cover;
-border-radius:24px;
-transform:scale(0.95);
-}
-.face-1 .home-video video{
-border-radius:0;
-transform:scale(1);
-width:100%;
-height:100%;
-object-fit:cover;
+.panel::before,
+.panel::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
 }
 
-.about-wrapper{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:18px;
-max-width:900px;
-text-align:center;
-opacity:0;
-filter:blur(18px);
-transition:.8s;
+.panel:not(.panel-home){
+  background:
+    linear-gradient(135deg, rgba(6,9,18,.96) 0%, rgba(10,15,28,.96) 45%, rgba(16,24,41,.95) 100%);
 }
 
-.about-wrapper.active{
-opacity:1;
-filter:blur(0);
+.panel:not(.panel-home)::before{
+  inset:-12%;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(156,201,255,.16), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(255,255,255,.10), transparent 24%),
+    radial-gradient(circle at 50% 82%, rgba(112,162,255,.14), transparent 34%);
+  opacity:.92;
 }
 
-.about-photo-ring{
-width:300px;
-height:420px;
-border-radius:28px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,.08));
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,.4);
-box-shadow:0 20px 60px rgba(90,167,255,.25);
-overflow:hidden;
+.panel:not(.panel-home)::after{
+  background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 22%, transparent 78%, rgba(0,0,0,.3));
+  opacity:.9;
 }
 
-.about-photo-placeholder{
-width:100%;
-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:600;
-background:rgba(255,255,255,.25);
-border-radius:28px;
+.panel-home{
+  background:#02040a;
+  isolation:isolate;
 }
 
-.about-content h2{
-font-size:3.8rem;
-background:linear-gradient(90deg,#5aa7ff,#8ec5ff,#eaf4ff);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-margin-bottom:20px;
+.panel-home::before{
+  z-index:0;
+  inset:-8%;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(156,201,255,.18), transparent 26%),
+    radial-gradient(circle at 84% 22%, rgba(255,255,255,.14), transparent 22%),
+    radial-gradient(circle at 50% 82%, rgba(112,162,255,.14), transparent 34%),
+    linear-gradient(135deg, rgba(3,5,10,.2), rgba(8,12,20,.72));
 }
 
-.about-content p{
-font-size:1.4rem;
-line-height:1.8;
-opacity:.85;
-max-width:760px;
+.panel-home::after{
+  z-index:3;
+  background:
+    linear-gradient(115deg, rgba(255,255,255,.22) 0%, transparent 35%, rgba(255,255,255,.06) 58%, transparent 78%),
+    linear-gradient(180deg, rgba(2,4,10,.12) 0%, transparent 18%, transparent 78%, rgba(2,4,10,.48) 100%);
+  opacity:.72;
 }
 
+.face-tag{
+  position:absolute;
+  top:clamp(18px,2vw,24px);
+  left:clamp(18px,2vw,24px);
+  z-index:4;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  color:rgba(236,243,251,.82);
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:.7rem;
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(10px) scale(.992);
+  transition:opacity 420ms var(--ease), transform 420ms var(--ease);
+  transition-delay:0ms;
+}
+
+.panel.is-active .reveal{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+.home-visual{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:#02040a;
+  pointer-events:none;
+}
+
+.home-visual video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center center;
+  border:0;
+}
+
+.home-copy{
+  position:absolute;
+  left:clamp(18px,4vw,60px);
+  bottom:clamp(24px,6vh,68px);
+  z-index:4;
+  width:min(520px,calc(100vw - 36px));
+  padding:22px 22px 20px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:28px;
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+  box-shadow:var(--shadow);
+}
+
+.home-eyebrow,
+.section-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-transform:uppercase;
+  letter-spacing:.24em;
+  font-size:.72rem;
+  color:rgba(236,243,251,.82);
+}
+
+.home-title,
+.section-title{
+  margin-top:16px;
+  letter-spacing:-.06em;
+  line-height:.94;
+  text-wrap:balance;
+  background:linear-gradient(90deg, #ffffff 0%, #d9ebff 48%, #ffffff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.home-title{
+  font-size:clamp(2.4rem,5vw,5.3rem);
+}
+
+.section-title{
+  font-size:clamp(2.5rem,5vw,4.9rem);
+}
+
+.home-copy p,
+.section-lead{
+  margin-top:16px;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:clamp(1rem,1.2vw,1.16rem);
+  max-width:58ch;
+}
+
+.home-actions{
+  margin-top:18px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.action-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  font-weight:600;
+  letter-spacing:.02em;
+  cursor:pointer;
+  transition:transform .35s var(--ease), border-color .35s ease, background .35s ease;
+}
+
+.action-btn:hover,
+.action-btn:focus-visible{
+  transform:translateY(-1px);
+}
+
+.action-btn--solid{
+  background:linear-gradient(135deg, rgba(228,240,255,.92), rgba(166,205,255,.88));
+  color:#07111e;
+}
+
+.action-btn--ghost{
+  background:rgba(255,255,255,.05);
+  color:#fff;
+}
+
+.home-hint{
+  position:absolute;
+  right:clamp(18px,4vw,60px);
+  bottom:clamp(24px,6vh,68px);
+  z-index:4;
+  padding:12px 16px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:rgba(5,8,16,.42);
+  color:rgba(236,243,251,.8);
+  font-size:.76rem;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+}
+
+.section-grid{
+  width:min(1180px,100%);
+  height:100%;
+  margin:0 auto;
+  display:grid;
+  align-content:center;
+  gap:clamp(22px,4vw,56px);
+}
+
+.section-grid--about{
+  grid-template-columns:minmax(280px,380px) minmax(0,1fr);
+  align-items:center;
+}
+
+.section-grid--projects{
+  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+  align-items:center;
+}
+
+.section-grid--contact{
+  grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+  align-items:center;
+}
+
+.section-copy{
+  max-width:680px;
+}
+
+.glass-card{
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px) saturate(145%);
+}
+
+.portrait-card{
+  position:relative;
+  border-radius:32px;
+  padding:14px;
+  overflow:hidden;
+}
+
+.portrait-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,.24), transparent 34%, rgba(156,201,255,.14) 74%, transparent 100%);
+  pointer-events:none;
+}
+
+.portrait-frame{
+  position:relative;
+  overflow:hidden;
+  min-height:460px;
+  border-radius:24px;
+  background:linear-gradient(160deg, rgba(7,12,24,.95), rgba(26,42,68,.9));
+}
+
+.portrait-frame svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.portrait-caption{
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:16px;
+  padding:14px 16px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:rgba(4,8,16,.34);
+  color:rgba(255,255,255,.92);
+}
+
+.portrait-caption strong{
+  display:block;
+  margin-bottom:4px;
+  font-size:.98rem;
+}
+
+.portrait-caption span{
+  color:rgba(232,240,252,.72);
+  line-height:1.65;
+  font-size:.92rem;
+}
+
+.mini-grid{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.mini-card{
+  padding:18px;
+  border-radius:22px;
+}
+
+.mini-card strong{
+  display:block;
+  margin-bottom:8px;
+  font-size:1.02rem;
+  color:#fff;
+}
+
+.mini-card p{
+  color:var(--muted);
+  line-height:1.7;
+  font-size:.95rem;
+}
+
+.projects-layout,
+.contact-stack{
+  display:grid;
+  gap:14px;
+}
+
+.project-card{
+  position:relative;
+  overflow:hidden;
+  padding:20px;
+  border-radius:24px;
+  min-height:176px;
+}
+
+.project-card::after{
+  content:'';
+  position:absolute;
+  inset:auto -24px -24px auto;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(156,201,255,.18), transparent 66%);
+  pointer-events:none;
+}
+
+.project-card--featured{
+  min-height:280px;
+}
+
+.project-index{
+  color:rgba(232,240,252,.72);
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:.76rem;
+}
+
+.project-card h3{
+  margin-top:18px;
+  font-size:clamp(1.5rem,2.4vw,2.4rem);
+  line-height:.96;
+  letter-spacing:-.05em;
+}
+
+.project-card p{
+  margin-top:10px;
+  color:var(--muted);
+  line-height:1.72;
+  max-width:44ch;
+}
+
+.project-tags{
+  margin-top:18px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.project-tags span{
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.82);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:.8rem;
+}
+
+.contact-card{
+  padding:20px;
+  border-radius:24px;
+}
+
+.contact-card strong{
+  display:block;
+  font-size:1.02rem;
+  color:#fff;
+}
+
+.contact-card p{
+  margin-top:8px;
+  color:var(--muted);
+  line-height:1.72;
+}
+
+.contact-card--primary{
+  min-height:228px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.contact-email{
+  margin-top:12px;
+  font-size:clamp(1.4rem,2.8vw,2.2rem);
+  letter-spacing:-.05em;
+  color:#fff;
+  line-height:1;
+}
+
+.contact-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.panel .primary-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(135deg, rgba(228,240,255,.92), rgba(166,205,255,.88));
+  color:#07111e;
+  font-weight:700;
+}
+
+.panel .secondary-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:#fff;
+  font-weight:600;
+}
+
+@media (max-width: 980px){
+  .panel{
+    padding-top:88px;
+  }
+
+  .section-grid--about,
+  .section-grid--projects,
+  .section-grid--contact{
+    grid-template-columns:1fr;
+    align-content:start;
+  }
+
+  .mini-grid,
+  .contact-grid{
+    grid-template-columns:1fr;
+  }
+
+  .project-card--featured{
+    min-height:240px;
+  }
+
+  .portrait-frame{
+    min-height:360px;
+  }
+
+  .home-copy{
+    left:16px;
+    right:16px;
+    bottom:86px;
+    width:auto;
+  }
+
+  .home-hint{
+    left:16px;
+    right:auto;
+    bottom:18px;
+  }
+}
+
+@media (max-width: 640px){
+  .nav-shell{
+    top:14px;
+    width:calc(100vw - 18px);
+  }
+
+  .nav{
+    gap:6px;
+    padding:6px;
+  }
+
+  .nav-indicator{
+    top:6px;
+    left:6px;
+    bottom:6px;
+  }
+
+  .nav-btn{
+    min-width:0;
+    padding:10px 8px;
+    font-size:.78rem;
+  }
+
+  .panel{
+    padding-left:14px;
+    padding-right:14px;
+    padding-top:76px;
+  }
+
+  .home-copy{
+    padding:18px;
+    bottom:88px;
+  }
+
+  .home-title{
+    font-size:clamp(1.9rem,8vw,2.8rem);
+  }
+
+  .home-copy p,
+  .section-lead{
+    font-size:.98rem;
+  }
+
+  .section-title{
+    font-size:clamp(2.1rem,10vw,3.3rem);
+  }
+
+  .portrait-frame{
+    min-height:300px;
+  }
+
+  .project-card h3{
+    font-size:1.35rem;
+  }
+
+  .contact-email{
+    font-size:1.45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
 </style>
 </head>
 
 <body>
+<div class="scene-shell">
+  <nav class="nav-shell" aria-label="Primary">
+    <div class="nav">
+      <div class="nav-indicator" aria-hidden="true"></div>
+      <button type="button" class="nav-btn is-active" data-index="0" aria-current="page">Home</button>
+      <button type="button" class="nav-btn" data-index="1">About</button>
+      <button type="button" class="nav-btn" data-index="2">Projects</button>
+      <button type="button" class="nav-btn" data-index="3">Contact</button>
+    </div>
+  </nav>
 
-<div class="hero-bg"></div>
+  <main class="cube-stage">
+    <div class="cube">
+      <section class="panel panel-home is-active" data-face="0" aria-label="Home">
+        <div class="face-tag">01 / Home</div>
+        <div class="home-visual" aria-hidden="true">
+          <video autoplay muted loop playsinline preload="auto">
+            <source src="welcome.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="home-copy reveal" style="--delay:120ms">
+          <div class="home-eyebrow">Luxury Motion / Spatial UI</div>
+          <h1 class="home-title">Luxury digital experiences shaped by motion and glass.</h1>
+          <p>Fullscreen video dominates the frame while the rest of the studio unfolds as polished workspace faces.</p>
+          <div class="home-actions">
+            <button type="button" class="action-btn action-btn--solid" data-target="1">Explore About</button>
+            <button type="button" class="action-btn action-btn--ghost" data-target="2">View Projects</button>
+          </div>
+        </div>
+        <div class="home-hint reveal" style="--delay:220ms">Scroll or use the nav to switch spaces</div>
+      </section>
 
-<nav>
-<ul>
-<li><a href="#">Home</a></li>
-<li><a href="#">About</a></li>
-<li><a href="#">Projects</a></li>
-<li><a href="#">Contact</a></li>
-</ul>
-</nav>
+      <section class="panel panel-about" data-face="1" aria-label="About" aria-hidden="true" inert>
+        <div class="face-tag">02 / About</div>
+        <div class="section-grid section-grid--about">
+          <article class="portrait-card glass-card reveal" style="--delay:120ms">
+            <div class="portrait-frame">
+              <svg viewBox="0 0 600 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stylized profile portrait">
+                <defs>
+                  <linearGradient id="about-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#eef6ff" />
+                    <stop offset="40%" stop-color="#bfd7ff" />
+                    <stop offset="100%" stop-color="#5d7fb1" />
+                  </linearGradient>
+                  <radialGradient id="about-glow" cx="35%" cy="28%" r="55%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity=".95" />
+                    <stop offset="45%" stop-color="#cfe4ff" stop-opacity=".64" />
+                    <stop offset="100%" stop-color="#cfe4ff" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="about-skin" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="100%" stop-color="#d8e7ff" />
+                  </linearGradient>
+                  <linearGradient id="about-suit" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#14223a" />
+                    <stop offset="100%" stop-color="#0a1220" />
+                  </linearGradient>
+                </defs>
+                <rect width="600" height="760" rx="36" fill="url(#about-bg)" />
+                <circle cx="146" cy="146" r="136" fill="url(#about-glow)" />
+                <circle cx="468" cy="610" r="176" fill="#ffffff" fill-opacity=".16" />
+                <path d="M300 160c55 0 100 45 100 100s-45 100-100 100-100-45-100-100 45-100 100-100z" fill="url(#about-skin)" />
+                <path d="M168 566c24-80 79-126 132-126h0c53 0 108 46 132 126 10 34-13 68-48 68H216c-35 0-58-34-48-68z" fill="url(#about-suit)" />
+                <path d="M226 324c26 18 90 22 148 0 0 0 18 61 18 99 0 58-38 96-92 96s-92-38-92-96c0-38 18-99 18-99z" fill="url(#about-skin)" />
+                <path d="M252 254c6-22 24-38 48-38s42 16 48 38" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="10" stroke-linecap="round" />
+                <path d="M208 392c32 22 66 32 92 32s61-10 92-32" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="8" stroke-linecap="round" />
+                <rect x="0.5" y="0.5" width="599" height="759" rx="35.5" fill="none" stroke="rgba(255,255,255,.46)" />
+              </svg>
+            </div>
+            <div class="portrait-caption">
+              <strong>Studio Profile</strong>
+              <span>Glass portrait frame with a luminous, editorial finish.</span>
+            </div>
+          </article>
 
-<div class="cube-scene">
-<div class="cube">
+          <div class="section-copy">
+            <div class="section-eyebrow reveal" style="--delay:140ms">What I do</div>
+            <h2 class="section-title reveal" style="--delay:200ms">I design calm, cinematic interfaces.</h2>
+            <p class="section-lead reveal" style="--delay:260ms">I build premium digital experiences that feel tactile, spatial, and effortless - blending motion, interface systems, and refined storytelling into one cohesive surface.</p>
 
-<section class="face face-1 active">
-<div class="home-video">
-<video autoplay muted loop playsinline>
-<source src="welcome.mp4" type="video/mp4">
-</video>
-</div>
-</section>
+            <div class="mini-grid">
+              <article class="mini-card glass-card reveal" style="--delay:320ms">
+                <strong>Motion First</strong>
+                <p>Transitions feel deliberate, spatial, and tuned for clarity rather than noise.</p>
+              </article>
+              <article class="mini-card glass-card reveal" style="--delay:380ms">
+                <strong>Glass Systems</strong>
+                <p>Soft translucency, sharp typography, and structured depth shape the visual language.</p>
+              </article>
+              <article class="mini-card glass-card reveal" style="--delay:440ms">
+                <strong>Cinematic Pacing</strong>
+                <p>Every screen is built like a scene so the experience always feels composed.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<section class="face face-2">
-<div class="about-wrapper">
-<div class="about-photo-ring">
-<div class="about-photo-placeholder">Your Photo</div>
-</div>
+      <section class="panel panel-projects" data-face="2" aria-label="Projects" aria-hidden="true" inert>
+        <div class="face-tag">03 / Projects</div>
+        <div class="section-grid section-grid--projects">
+          <div class="section-copy">
+            <div class="section-eyebrow reveal" style="--delay:120ms">Selected work</div>
+            <h2 class="section-title reveal" style="--delay:180ms">Selected work with a luxury finish.</h2>
+            <p class="section-lead reveal" style="--delay:240ms">A concise collection of launches, systems, and motion studies crafted for brands that want a premium, cinematic web presence.</p>
+          </div>
 
-<div class="about-content">
-<h2>About Me</h2>
-<p>
-Creative developer focused on immersive digital experiences and premium UI design.
-</p>
-</div>
-</div>
-</section>
+          <div class="projects-layout">
+            <article class="project-card project-card--featured glass-card reveal" style="--delay:300ms">
+              <div class="project-index">01 / Immersive commerce</div>
+              <h3>Aurora Commerce</h3>
+              <p>A cinematic storefront concept with tactile product layers, motion-led navigation, and a calm premium rhythm.</p>
+              <div class="project-tags">
+                <span>Strategy</span>
+                <span>Motion</span>
+                <span>3D Layout</span>
+              </div>
+            </article>
 
-<section class="face face-3"></section>
-<section class="face face-4"></section>
+            <article class="project-card glass-card reveal" style="--delay:380ms">
+              <div class="project-index">02 / Design system</div>
+              <h3>Studio OS</h3>
+              <p>A workspace interface for products that need clarity, hierarchy, and a glass-first aesthetic.</p>
+            </article>
 
-</div>
+            <article class="project-card glass-card reveal" style="--delay:440ms">
+              <div class="project-index">03 / Launch page</div>
+              <h3>Noir Launch</h3>
+              <p>A teaser experience built around video, light, and measured transitions for high-end product storytelling.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-contact" data-face="3" aria-label="Contact" aria-hidden="true" inert>
+        <div class="face-tag">04 / Contact</div>
+        <div class="section-grid section-grid--contact">
+          <div class="section-copy">
+            <div class="section-eyebrow reveal" style="--delay:120ms">Get in touch</div>
+            <h2 class="section-title reveal" style="--delay:180ms">Let's build something immersive.</h2>
+            <p class="section-lead reveal" style="--delay:240ms">Open for select collaborations, launch systems, and immersive portfolio builds that need a premium spatial feel.</p>
+            <div class="contact-actions reveal" style="--delay:300ms">
+              <button type="button" class="primary-link" data-target="2">See Projects</button>
+              <a class="secondary-link" href="mailto:hello@luxeportfolio.dev">Send Email</a>
+            </div>
+          </div>
+
+          <div class="contact-stack">
+            <article class="contact-card contact-card--primary glass-card reveal" style="--delay:340ms">
+              <div>
+                <strong>Start with a message</strong>
+                <div class="contact-email">hello@luxeportfolio.dev</div>
+                <p>For premium launches, portfolio rebuilds, and motion-led digital products.</p>
+              </div>
+              <div class="contact-actions">
+                <a class="primary-link" href="mailto:hello@luxeportfolio.dev">Book a conversation</a>
+                <button type="button" class="secondary-link" data-target="0">Back to Home</button>
+              </div>
+            </article>
+
+            <div class="contact-grid">
+              <article class="contact-card glass-card reveal" style="--delay:400ms">
+                <strong>Response</strong>
+                <p>24-48 hours for qualified project inquiries.</p>
+              </article>
+              <article class="contact-card glass-card reveal" style="--delay:440ms">
+                <strong>Location</strong>
+                <p>Remote / Worldwide.</p>
+              </article>
+              <article class="contact-card glass-card reveal" style="--delay:480ms">
+                <strong>Availability</strong>
+                <p>Select openings for new launches and studio work.</p>
+              </article>
+              <article class="contact-card glass-card reveal" style="--delay:520ms">
+                <strong>Focus</strong>
+                <p>Portfolio sites, creative direction, motion, and glass systems.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 </div>
 
 <script>
-let currentFace = 0;
-let animating = false;
+const panels = [...document.querySelectorAll('.panel')];
+const navButtons = [...document.querySelectorAll('.nav-btn')];
+const heroButtons = [...document.querySelectorAll('[data-target]')];
+const nav = document.querySelector('.nav');
+const indicator = document.querySelector('.nav-indicator');
 
-const navLinks = document.querySelectorAll('nav a');
-const aboutWrapper = document.querySelector('.about-wrapper');
+let currentIndex = 0;
+let locked = false;
+let unlockTimer = 0;
+let touchStartX = 0;
+let touchStartY = 0;
+let touchActive = false;
+const transitionDuration = 480;
 
-function goToFace(target){
-if(animating) return;
-animating = true;
-
-currentFace = target;
-
-document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
-
-const el = document.querySelector('.face-' + (target+1));
-if(el) el.classList.add('active');
-
-if(aboutWrapper){
-if(target === 1) aboutWrapper.classList.add('active');
-else aboutWrapper.classList.remove('active');
+function syncNavIndicator(){
+  const activeButton = navButtons[currentIndex];
+  if(!activeButton) return;
+  const navRect = nav.getBoundingClientRect();
+  const buttonRect = activeButton.getBoundingClientRect();
+  indicator.style.width = `${buttonRect.width}px`;
+  indicator.style.transform = `translateX(${buttonRect.left - navRect.left}px)`;
 }
 
-setTimeout(()=>animating=false,600);
+function setActive(index){
+  const nextIndex = (index + panels.length) % panels.length;
+  if(locked || nextIndex === currentIndex) return;
+
+  locked = true;
+  window.clearTimeout(unlockTimer);
+  currentIndex = nextIndex;
+
+  panels.forEach((panel, i) => {
+    const active = i === currentIndex;
+    panel.classList.toggle('is-active', active);
+    panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+    panel.inert = !active;
+  });
+
+  navButtons.forEach((button, i) => {
+    const active = i === currentIndex;
+    button.classList.toggle('is-active', active);
+    if(active) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  });
+
+  requestAnimationFrame(syncNavIndicator);
+  unlockTimer = window.setTimeout(() => {
+    locked = false;
+  }, transitionDuration);
 }
 
-navLinks.forEach((a,i)=>{
-a.addEventListener('click', e=>{
-e.preventDefault();
-goToFace(i);
-});
+navButtons.forEach(button => {
+  button.addEventListener('click', () => setActive(Number(button.dataset.index)));
 });
 
-window.addEventListener('wheel', e=>{
-if(animating) return;
-if(Math.abs(e.deltaY)<10) return;
+heroButtons.forEach(button => {
+  button.addEventListener('click', () => setActive(Number(button.dataset.target)));
+});
 
-if(e.deltaY>0 && currentFace===0) goToFace(1);
-if(e.deltaY<0 && currentFace===1) goToFace(0);
+window.addEventListener('wheel', event => {
+  if(locked || Math.abs(event.deltaY) < 10) return;
+  event.preventDefault();
+  setActive(currentIndex + (event.deltaY > 0 ? 1 : -1));
+}, { passive:false });
 
-},{passive:false});
+window.addEventListener('keydown', event => {
+  if(locked) return;
+  if(event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'PageDown'){
+    event.preventDefault();
+    setActive(currentIndex + 1);
+  }else if(event.key === 'ArrowLeft' || event.key === 'ArrowUp' || event.key === 'PageUp'){
+    event.preventDefault();
+    setActive(currentIndex - 1);
+  }else if(event.key === 'Home'){
+    event.preventDefault();
+    setActive(0);
+  }else if(event.key === 'End'){
+    event.preventDefault();
+    setActive(panels.length - 1);
+  }
+});
+
+window.addEventListener('touchstart', event => {
+  const touch = event.touches[0];
+  touchActive = true;
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+}, { passive:true });
+
+window.addEventListener('touchend', event => {
+  if(!touchActive || locked) return;
+  const touch = event.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+  touchActive = false;
+
+  if(Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
+  setActive(currentIndex + (dx < 0 ? 1 : -1));
+}, { passive:true });
+
+window.addEventListener('resize', syncNavIndicator);
+window.addEventListener('load', syncNavIndicator);
+
+panels.forEach((panel, i) => {
+  const active = i === currentIndex;
+  panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+  panel.inert = !active;
+});
+
+requestAnimationFrame(syncNavIndicator);
 </script>
-
 </body>
 </html>
