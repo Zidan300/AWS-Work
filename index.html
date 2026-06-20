@@ -5,13 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luxury Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;scroll-behavior:smooth}
+
 body{
 background:linear-gradient(135deg,#f9fbff,#fff6fd,#f4fff8);
 color:#111827;
 overflow-x:hidden;
 }
+
 .hero-bg{
 position:fixed;
 inset:0;
@@ -23,9 +26,11 @@ radial-gradient(circle at 50% 80%,rgba(90,167,255,.12),transparent 30%);
 filter:blur(50px);
 animation:floatbg 12s ease-in-out infinite alternate;
 }
+
 @keyframes floatbg{
 100%{transform:scale(1.2) translateY(-30px)}
 }
+
 nav{
 position:fixed;
 top:25px;
@@ -42,15 +47,14 @@ border-radius:999px;
 box-shadow:0 10px 40px rgba(0,0,0,.06);
 z-index:1000;
 }
-.logo{
-display:none;
-}
+
 nav ul{
 display:flex;
 gap:20px;
 list-style:none;
 align-items:center;
 }
+
 nav a{
 text-decoration:none;
 color:#111827;
@@ -66,72 +70,6 @@ background:rgba(255,255,255,.65);
 transform:translateY(-3px) scale(1.08);
 box-shadow:0 10px 30px rgba(88,166,255,.18);
 }
-section{
-min-height:100vh;
-padding:120px 10%;
-display:flex;
-justify-content:center;
-flex-direction:column;
-}
-.hero h1{
-font-size:clamp(3rem,8vw,7rem);
-line-height:1;
-margin-bottom:20px;
-background:linear-gradient(90deg,#5aa7ff,#8ec5ff,#eaf4ff);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-.hero p{
-max-width:700px;
-font-size:1.1rem;
-line-height:1.8;
-opacity:.8;
-}
-.btn{
-margin-top:30px;
-width:max-content;
-padding:15px 30px;
-border:none;
-border-radius:999px;
-background:linear-gradient(90deg,#5aa7ff,#8ec5ff,#dbeeff);
-color:white;
-font-weight:600;
-cursor:pointer;
-transition:.4s;
-}
-.btn:hover{
-transform:translateY(-5px) scale(1.05);
-}
-.card-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;
-margin-top:50px;
-}
-.card{
-background:rgba(255,255,255,.5);
-backdrop-filter:blur(20px);
-padding:30px;
-border-radius:30px;
-border:1px solid rgba(255,255,255,.5);
-transition:.5s;
-}
-.card:hover{
-transform:translateY(-12px) rotateX(6deg);
-}
-.section-title{
-font-size:2.8rem;
-margin-bottom:20px;
-}
-.reveal{
-opacity:0;
-transform:translateY(50px);
-transition:1s;
-}
-.reveal.active{
-opacity:1;
-transform:translateY(0);
-}
 
 html,body{
 height:100%;
@@ -142,9 +80,7 @@ overflow:hidden;
 position:fixed;
 inset:0;
 perspective:3200px;
-perspective-origin:center;
 overflow:hidden;
-background:transparent;
 }
 
 .cube{
@@ -152,83 +88,70 @@ position:absolute;
 width:100%;
 height:100%;
 transform-style:preserve-3d;
-will-change:transform;
-transform-origin:center;
 }
 
 .face{
 position:absolute;
 width:100vw;
 height:100vh;
-overflow:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
 flex-direction:column;
 padding-top:90px;
-backface-visibility:hidden;
-border:1px solid rgba(255,255,255,.12);
-box-shadow: inset 0 0 120px rgba(255,255,255,.05);
-background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
 opacity:0;
-transition:opacity .9s ease;
-transition:opacity .6s ease;
+transition:opacity .6s ease, transform .6s ease;
+border-radius:28px;
+margin:18px;
+width:calc(100vw - 36px);
+height:calc(100vh - 36px);
+box-shadow:0 25px 80px rgba(0,0,0,.10);
+transform:scale(.98) translateY(20px);
+background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
 }
 
 .face.active{
 opacity:1;
-pointer-events:auto;
+transform:scale(1) translateY(0);
 z-index:2;
 }
 
-.face-1,
-.face-2,
-.face-3,
-.face-4{
-transform:none;
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
+.face-1{
+background:#ffffff;
+margin:0;
+width:100vw;
+height:100vh;
+border-radius:0;
+box-shadow:none;
 }
-
-.face-1{opacity:1;}
-.face-2{opacity:0;}
-.face-3{opacity:0;}
-.face-4{opacity:0;}
+.face-2{background:transparent;}
+.face-3{background:transparent;}
+.face-4{background:transparent;}
 
 .home-video{
 position:absolute;
 inset:0;
-width:100%;
-height:100%;
-margin:0;
-overflow:hidden;
-transition:opacity .9s ease, transform .9s ease, filter .9s ease;
-will-change:opacity,transform,filter;
-border-radius:28px;
-overflow:hidden;
 padding:18px;
 box-sizing:border-box;
+}
+.face-1 .home-video{
+padding:0;
 }
 
 .home-video video{
 width:100%;
 height:100%;
 object-fit:cover;
-display:block;
 border-radius:24px;
 transform:scale(0.95);
 }
-
-.home-video.morph-out{
-opacity:0;
-transform:none;
-filter:blur(26px);
-transition:opacity .9s ease, filter .9s ease;
+.face-1 .home-video video{
+border-radius:0;
+transform:scale(1);
+width:100%;
+height:100%;
+object-fit:cover;
 }
-
 
 .about-wrapper{
 display:flex;
@@ -237,26 +160,20 @@ align-items:center;
 justify-content:center;
 gap:18px;
 max-width:900px;
-width:100%;
+text-align:center;
 opacity:0;
 filter:blur(18px);
-transition:opacity 1.1s ease, filter 1.1s ease;
-text-align:center;
-}
-
-.face-2 .about-wrapper{
-transform:scale(0.95);
-transform-origin:center;
+transition:.8s;
 }
 
 .about-wrapper.active{
 opacity:1;
-filter:blur(0px);
+filter:blur(0);
 }
 
 .about-photo-ring{
-width:240px;
-height:340px;
+width:300px;
+height:420px;
 border-radius:28px;
 display:flex;
 align-items:center;
@@ -266,85 +183,39 @@ backdrop-filter:blur(20px);
 border:1px solid rgba(255,255,255,.4);
 box-shadow:0 20px 60px rgba(90,167,255,.25);
 overflow:hidden;
-position:relative;
-animation:breathe 6s ease-in-out infinite;
-}
-
-.about-photo-ring::before{
-content:"";
-position:absolute;
-inset:-60px;
-background:radial-gradient(circle at center, rgba(90,167,255,.35), transparent 65%);
-filter:blur(30px);
-z-index:0;
-pointer-events:none;
 }
 
 .about-photo-placeholder{
 width:100%;
 height:100%;
-border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(255,255,255,.25);
-backdrop-filter:blur(24px);
-border:1px solid rgba(255,255,255,.35);
 font-weight:600;
-letter-spacing:1px;
-position:relative;
-z-index:1;
-}
-
-.about-content{
-max-width:550px;
-text-align:center;
+background:rgba(255,255,255,.25);
+border-radius:28px;
 }
 
 .about-content h2{
-font-size:clamp(2.6rem,5vw,4.8rem);
-margin-bottom:20px;
+font-size:3.8rem;
 background:linear-gradient(90deg,#5aa7ff,#8ec5ff,#eaf4ff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-text-align:center;
+margin-bottom:20px;
 }
 
 .about-content p{
-font-size:1.22rem;
-line-height:1.9;
-opacity:.82;
+font-size:1.4rem;
+line-height:1.8;
+opacity:.85;
+max-width:760px;
 }
 
-@keyframes spinRing{
-from{transform:rotate(0deg)}
-to{transform:rotate(360deg)}
-}
-
-@keyframes breathe{
-0%{transform:scale(1)}
-50%{transform:scale(1.02)}
-100%{transform:scale(1)}
-}
-
-@media(max-width:768px){
-nav ul{display:none}
-.hero h1{font-size:3.5rem}
-.about-wrapper{
-flex-direction:column;
-gap:40px;
-padding:0 24px;
-text-align:center;
-}
-.about-photo-ring{
-width:180px;
-height:260px;
-border-radius:22px;
-}
-}
 </style>
 </head>
+
 <body>
+
 <div class="hero-bg"></div>
 
 <nav>
@@ -357,106 +228,79 @@ border-radius:22px;
 </nav>
 
 <div class="cube-scene">
-<div class="cube" id="cube">
-<section class="face face-1 reveal active">
-  <div class="home-video">
-    <video autoplay muted loop playsinline>
-      <source src="welcome.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</section>
-<section class="face face-2">
-  <div class="about-wrapper">
-    <div class="about-photo-ring">
-      <div class="about-photo-placeholder">
-        <span>Your Photo</span>
-      </div>
-    </div>
+<div class="cube">
 
-    <div class="about-content">
-      <h2>About Me</h2>
-      <p>
-        Creative developer focused on immersive digital experiences,
-        elegant interfaces, and premium visual design. Combining
-        aesthetics, motion, and functionality to create memorable
-        interactions that feel refined and modern.
-      </p>
-    </div>
-  </div>
+<section class="face face-1 active">
+<div class="home-video">
+<video autoplay muted loop playsinline>
+<source src="welcome.mp4" type="video/mp4">
+</video>
+</div>
 </section>
+
+<section class="face face-2">
+<div class="about-wrapper">
+<div class="about-photo-ring">
+<div class="about-photo-placeholder">Your Photo</div>
+</div>
+
+<div class="about-content">
+<h2>About Me</h2>
+<p>
+Creative developer focused on immersive digital experiences and premium UI design.
+</p>
+</div>
+</div>
+</section>
+
 <section class="face face-3"></section>
 <section class="face face-4"></section>
+
 </div>
 </div>
 
 <script>
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-const welcomeBox = document.querySelector('.home-video');
-const cube = document.getElementById('cube');
-const aboutWrapper = document.querySelector('.about-wrapper');
-
 let currentFace = 0;
-
-const navLinks = document.querySelectorAll('nav a');
-
-function goToFace(target){
-  if (animating) return;
-  animating = true;
-  currentFace = target;
-
-  document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
-
-  const targetFace = document.querySelector('.face-' + (target + 1));
-  if (targetFace) targetFace.classList.add('active');
-
-  if (aboutWrapper) {
-    if (target === 1) aboutWrapper.classList.add('active');
-    else aboutWrapper.classList.remove('active');
-  }
-
-  if (target === 0) {
-    welcomeBox.classList.remove('morph-out');
-  } else {
-    welcomeBox.classList.add('morph-out');
-  }
-
-  setTimeout(() => {
-    animating = false;
-  }, 600);
-}
-
-navLinks.forEach((link, i) => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    goToFace(i);
-  });
-});
-
-let hidden = false;
 let animating = false;
 
-window.addEventListener('wheel', (e) => {
-  if (animating) return;
-  if (Math.abs(e.deltaY) < 10) return;
+const navLinks = document.querySelectorAll('nav a');
+const aboutWrapper = document.querySelector('.about-wrapper');
 
-  if (e.deltaY > 0 && currentFace === 0) {
-    goToFace(1);
-  }
+function goToFace(target){
+if(animating) return;
+animating = true;
 
-  if (e.deltaY < 0 && currentFace === 1) {
-    goToFace(0);
-  }
-}, { passive: false });
+currentFace = target;
+
+document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
+
+const el = document.querySelector('.face-' + (target+1));
+if(el) el.classList.add('active');
+
+if(aboutWrapper){
+if(target === 1) aboutWrapper.classList.add('active');
+else aboutWrapper.classList.remove('active');
+}
+
+setTimeout(()=>animating=false,600);
+}
+
+navLinks.forEach((a,i)=>{
+a.addEventListener('click', e=>{
+e.preventDefault();
+goToFace(i);
+});
+});
+
+window.addEventListener('wheel', e=>{
+if(animating) return;
+if(Math.abs(e.deltaY)<10) return;
+
+if(e.deltaY>0 && currentFace===0) goToFace(1);
+if(e.deltaY<0 && currentFace===1) goToFace(0);
+
+},{passive:false});
 </script>
+
 </body>
 </html>
