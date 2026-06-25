@@ -1420,9 +1420,9 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     max-width:calc(100vw - 10px);
   }
   .nav{
-    gap:3px;
+    gap:4px;
     padding:4px 5px;
-    justify-content:flex-start;
+    justify-content:center;
     border-radius:var(--radius-lg);
   }
   .nav-indicator{
@@ -1473,8 +1473,8 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:6px;
-    padding:4px 0 0;
+    gap:8px;
+    padding:2px 0 0;
   }
   .about-diagram{
     position:relative;
@@ -1487,7 +1487,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:6px;
+    gap:8px;
     padding:0;
     max-width:400px;
   }
@@ -1518,17 +1518,17 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     top:auto;
     width:100%;
     max-width:100%;
-    padding:12px 14px;
+    padding:14px 16px;
     border-radius:var(--radius-sm);
   }
   .about-callout strong{
-    font-size:.62rem;
+    font-size:.68rem;
     letter-spacing:.12em;
   }
   .about-callout p{
-    font-size:.78rem;
-    margin-top:4px;
-    line-height:1.5;
+    font-size:.84rem;
+    margin-top:6px;
+    line-height:1.55;
   }
   .about-callout--tl,
   .about-callout--tr,
@@ -1551,7 +1551,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     min-height:0;
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
+    gap:6px;
     padding:0 0 12px;
   }
   .section-grid--projects{
@@ -1571,7 +1571,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     width:100%;
     transform:none;
     min-height:0;
-    aspect-ratio:1;
+    aspect-ratio:0.9;
   }
   .projects-layout .project-card:last-child{
     grid-column:1 / -1;
@@ -1592,19 +1592,19 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   }
   .project-card__content{
     position:absolute;
-    inset:10%;
+    inset:8%;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
   }
   .project-index{
-    font-size:.4rem;
+    font-size:.38rem;
     letter-spacing:.06em;
   }
   .project-card h3{
     margin-top:4px;
-    font-size:.7rem;
+    font-size:.65rem;
     line-height:1.1;
   }
   .project-tags{
@@ -1612,8 +1612,8 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     gap:3px;
   }
   .project-tags span{
-    padding:2px 5px;
-    font-size:.38rem;
+    padding:2px 4px;
+    font-size:.36rem;
     letter-spacing:.03em;
   }
 
@@ -1621,15 +1621,15 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     height:auto;
     min-height:100%;
     align-content:start;
-    padding-bottom:6px;
+    padding-bottom:4px;
   }
   .certificate-layout{
     height:auto;
     min-height:0;
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
-    padding:0 0 6px;
+    gap:6px;
+    padding:0 0 4px;
   }
   .certificate-layout::before,
   .certificate-layout::after{
@@ -1642,8 +1642,8 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     width:100%;
     transform:none;
     min-height:0;
-    padding:16px 10px;
-    aspect-ratio:0.95;
+    padding:10px 8px;
+    aspect-ratio:0.8;
     border-radius:0;
     clip-path:polygon(50% 0%, 97.55% 34.55%, 79.39% 90.45%, 20.61% 90.45%, 2.45% 34.55%);
   }
@@ -1653,11 +1653,11 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     width:calc(50% - 4px);
   }
   .certificate-card strong{
-    font-size:.68rem;
+    font-size:.6rem;
     line-height:1.15;
   }
   .certificate-org{
-    font-size:.48rem;
+    font-size:.42rem;
     margin-top:3px;
     letter-spacing:.08em;
   }
@@ -1675,53 +1675,54 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 
   .contact-card-container{
     width:100%;
-    max-width:100%;
+    max-width:360px;
+    margin:0 auto;
     perspective:none;
   }
   .contact-glass-card{
-    padding:14px 12px 14px;
+    padding:20px 16px 22px;
     border-radius:var(--radius-md);
-    gap:8px;
+    gap:12px;
     transform-style:flat;
   }
   .contact-glass-card h2{
-    font-size:1.05rem;
+    font-size:1.15rem;
     margin-top:0;
   }
   .contact-link{
-    padding:10px 10px;
-    gap:8px;
-    min-height:44px;
+    padding:12px 14px;
+    gap:10px;
+    min-height:48px;
   }
   .contact-link__icon{
-    width:28px;
-    height:28px;
+    width:32px;
+    height:32px;
     flex-shrink:0;
   }
   .contact-link__icon svg{
-    width:13px;
-    height:13px;
+    width:15px;
+    height:15px;
   }
   .contact-link__value{
-    font-size:.78rem;
+    font-size:.82rem;
     word-break:break-all;
   }
   .contact-link__label{
-    font-size:.54rem;
+    font-size:.6rem;
   }
   .social-links-grid{
     gap:6px;
-    margin-top:2px;
+    margin-top:4px;
   }
   .social-btn{
-    width:38px;
-    height:38px;
-    min-width:38px;
-    min-height:38px;
+    width:36px;
+    height:36px;
+    min-width:36px;
+    min-height:36px;
   }
   .social-btn svg{
-    width:15px;
-    height:15px;
+    width:13px;
+    height:13px;
   }
 }
 
@@ -1735,6 +1736,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   .nav{
     gap:2px;
     padding:3px 4px;
+    justify-content:center;
     border-radius:var(--radius-md);
   }
   .nav-indicator{
@@ -1777,67 +1779,67 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     max-width:130px;
   }
   .about-callout{
-    padding:10px 12px;
+    padding:12px 14px;
   }
   .about-callout strong{
-    font-size:.58rem;
+    font-size:.62rem;
   }
   .about-callout p{
-    font-size:.72rem;
+    font-size:.78rem;
   }
   .section-grid--about{
-    gap:5px;
+    gap:6px;
   }
   .about-diagram{
-    gap:5px;
+    gap:6px;
   }
   .projects-layout{
-    gap:6px;
+    gap:5px;
     padding-bottom:12px;
   }
   .project-card h3{
-    font-size:.65rem;
+    font-size:.6rem;
   }
   .project-tags span{
-    font-size:.35rem;
+    font-size:.33rem;
     padding:1px 3px;
   }
   .project-card__content{
-    inset:8%;
+    inset:7%;
   }
   .certificate-layout{
-    gap:6px;
+    gap:5px;
   }
   .certificate-card{
-    padding:12px 7px;
+    padding:8px 6px;
   }
   .certificate-card strong{
-    font-size:.6rem;
+    font-size:.55rem;
   }
   .certificate-org{
-    font-size:.42rem;
+    font-size:.38rem;
   }
   .contact-glass-card{
-    padding:12px 10px 12px;
-    gap:6px;
+    padding:16px 12px 18px;
+    gap:8px;
     border-radius:var(--radius-sm);
   }
   .contact-glass-card h2{
-    font-size:.9rem;
+    font-size:1rem;
   }
   .contact-link{
-    padding:8px 10px;
-    min-height:38px;
+    padding:10px 12px;
+    min-height:42px;
   }
   .contact-link__icon{
-    width:24px;
-    height:24px;
+    width:28px;
+    height:28px;
   }
   .contact-link__value{
-    font-size:.7rem;
+    font-size:.75rem;
   }
   .contact-link__label{
-    font-size:.5rem;
+    font-size:.55rem;
   }
   .social-btn{
     width:32px;
@@ -1846,8 +1848,8 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     min-height:32px;
   }
   .social-btn svg{
-    width:13px;
-    height:13px;
+    width:12px;
+    height:12px;
   }
 }
 
@@ -1873,6 +1875,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   .nav{
     padding:3px 4px;
     gap:2px;
+    justify-content:center;
   }
   .nav-indicator{
     top:3px;
@@ -1917,7 +1920,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     max-height:24vh;
   }
   .about-callout{
-    padding:5px 8px;
+    padding:7px 10px;
     width:auto;
     max-width:140px;
     flex:0 0 auto;
@@ -1928,7 +1931,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     line-height:1.25;
   }
   .about-callout strong{
-    font-size:.48rem;
+    font-size:.52rem;
   }
   .about-callout--tl,
   .about-callout--tr,
@@ -1987,26 +1990,26 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     max-width:70vw;
   }
   .contact-glass-card{
-    padding:8px 8px 10px;
-    gap:5px;
+    padding:10px 10px 12px;
+    gap:6px;
   }
   .contact-glass-card h2{
-    font-size:.8rem;
+    font-size:.85rem;
   }
   .contact-link{
-    padding:6px 8px;
+    padding:7px 10px;
     gap:6px;
-    min-height:32px;
+    min-height:36px;
   }
   .contact-link__icon{
     width:22px;
     height:22px;
   }
   .contact-link__value{
-    font-size:.62rem;
+    font-size:.65rem;
   }
   .contact-link__label{
-    font-size:.46rem;
+    font-size:.5rem;
   }
   .social-links-grid{
     gap:4px;
