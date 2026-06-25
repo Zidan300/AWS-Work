@@ -243,7 +243,6 @@ a{
   flex-wrap:nowrap;
   transform:none;
   transition:none;
-  will-change:auto;
 }
 
 .panel{
@@ -277,18 +276,6 @@ a{
   transform:none;
   filter:blur(0);
   z-index:3;
-}
-
-.panel.enter-right{
-  transform:translateX(80px) scale(0.95);
-  filter:blur(10px);
-  opacity:0;
-}
-
-.panel.enter-left{
-  transform:translateX(-80px) scale(0.95);
-  filter:blur(10px);
-  opacity:0;
 }
 
 .panel.panel-about{
@@ -432,8 +419,7 @@ a{
   box-shadow:var(--shadow);
 }
 
-.home-eyebrow,
-.section-eyebrow{
+.home-eyebrow{
   display:inline-flex;
   align-items:center;
   gap:8px;
@@ -463,8 +449,7 @@ a{
   font-size:clamp(2.5rem,5vw,4.9rem);
 }
 
-.home-copy p,
-.section-lead{
+.home-copy p{
   margin-top:16px;
   color:var(--muted);
   line-height:1.8;
@@ -762,30 +747,10 @@ a{
   position:relative;
 }
 
-.section-grid--projects .section-copy{
-  position:absolute;
-  left:clamp(18px,4vw,64px);
-  top:50%;
-  transform:translateY(-50%);
-  z-index:5;
-  max-width:380px;
-  pointer-events:none;
-}
-
 .section-grid--certificates{
   grid-template-columns:1fr;
   align-items:center;
   position:relative;
-}
-
-.section-grid--certificates .section-copy{
-  position:absolute;
-  left:clamp(18px,4vw,64px);
-  top:50%;
-  transform:translateY(-50%);
-  z-index:5;
-  max-width:380px;
-  pointer-events:none;
 }
 
 .section-grid--contact{
@@ -794,10 +759,6 @@ a{
   place-items:center;
   width:100%;
   height:100%;
-}
-
-.section-copy{
-  max-width:680px;
 }
 
 .glass-card{
@@ -1080,7 +1041,8 @@ a{
   width:var(--cert-card-size);
   min-height:0;
   padding:16px;
-  border-radius:20px;
+  border-radius:0;
+  clip-path:polygon(50% 0%, 97.55% 34.55%, 79.39% 90.45%, 20.61% 90.45%, 2.45% 34.55%);
   transition:transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
   transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1));
   overflow:hidden;
@@ -1549,15 +1511,6 @@ a{
     transform:translateY(-4px) scale(1.02);
   }
 
-  .section-grid--projects .section-copy,
-  .section-grid--certificates .section-copy{
-    position:relative;
-    left:auto;
-    top:auto;
-    transform:none;
-    max-width:none;
-    pointer-events:auto;
-  }
 
   .social-btn{
     width:52px;
@@ -1654,12 +1607,6 @@ a{
       <section id="projects" class="panel panel-projects" data-face="2" aria-label="Projects">
         <div class="face-tag">03 / Projects</div>
         <div class="section-grid section-grid--projects">
-          <div class="section-copy">
-            <div class="section-eyebrow reveal" style="--delay:120ms">Selected work</div>
-            <h2 class="section-title reveal" style="--delay:180ms">Selected work with a luxury finish.</h2>
-            <p class="section-lead reveal" style="--delay:240ms">A concise collection of launches, systems, and motion studies crafted for brands that want a premium, cinematic web presence.</p>
-          </div>
-
           <div class="projects-layout">
             <article class="project-card project-card--featured glass-card reveal project-card--orbit-1" style="--delay:300ms">
               <div class="project-card__content">
@@ -1724,12 +1671,6 @@ a{
       <section id="certificates" class="panel panel-certificates" data-face="3" aria-label="Certificates">
         <div class="face-tag">04 / Certificates</div>
         <div class="section-grid section-grid--certificates">
-          <div class="section-copy">
-            <div class="section-eyebrow reveal" style="--delay:120ms">Credentials</div>
-            <h2 class="section-title reveal" style="--delay:180ms">Certificates</h2>
-            <p class="section-lead reveal" style="--delay:240ms">Selected credentials that support design systems, motion-led interfaces, and premium digital craftsmanship.</p>
-          </div>
-
           <div class="certificate-layout">
             <article class="certificate-card glass-card reveal cert-card--orbit-1" style="--delay:300ms">
               <strong>Luxury UI Systems</strong>
@@ -1771,9 +1712,9 @@ a{
 
       <section id="contact" class="panel panel-contact" data-face="4" aria-label="Contact" style="display: flex; align-items: center; justify-content: center;">
         <div class="face-tag">05 / Contact</div>
-        <div class="contact-card-container" style="perspective: 1000px; width: min(440px, 88vw);">
-          <div class="glass-card contact-depth-card" style="padding: 36px 32px 32px; border-radius: 28px; transform-style: preserve-3d; transition: transform 0.4s ease; display: grid; gap: 20px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-            <h2 class="section-title" style="margin: 0; font-size: 1.6rem;">Contact Me</h2>
+        <div class="contact-card-container" style="perspective: 1000px; width: min(520px, 90vw);">
+          <div class="glass-card contact-depth-card" style="padding: 44px 36px 36px; border-radius: 28px; transform-style: preserve-3d; transition: transform 0.4s ease; display: grid; gap: 24px; text-align: center; box-shadow: 0 24px 70px rgba(0,0,0,0.35);">
+            <h2 class="section-title" style="margin: 0; font-size: 1.8rem;">Contact Me</h2>
             <div class="contact-fields" style="display: grid; gap: 10px;">
               <input type="email" placeholder="Your email" style="padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; width: 100%; font-size: .92rem; outline: none; transition: border-color .25s ease;">
               <input type="tel" placeholder="Phone number" style="padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; width: 100%; font-size: .92rem; outline: none; transition: border-color .25s ease;">
@@ -1837,25 +1778,15 @@ function syncNavIndicator(){
   });
 }
 
-function setActiveIndex(index, dir){
+function setActiveIndex(index){
   if(index === currentIndex || index < 0 || index >= panels.length) return;
 
-  currentIndex = index;
-
-  panels.forEach(panel => {
-    panel.classList.remove('is-active', 'enter-right', 'enter-left');
+  panels.forEach((panel, i) => {
+    panel.classList.toggle('is-active', i === index);
   });
 
-  const incomingPanel = panels[index];
-  if(dir > 0){
-    incomingPanel.classList.add('enter-right');
-  } else if(dir < 0){
-    incomingPanel.classList.add('enter-left');
-  }
-
-  void incomingPanel.offsetHeight;
-  incomingPanel.classList.remove('enter-right', 'enter-left');
-  incomingPanel.classList.add('is-active', 'has-revealed');
+  panels[index].classList.add('has-revealed');
+  currentIndex = index;
 
   navButtons.forEach(button => {
     const active = Number(button.dataset.index) === currentIndex;
@@ -1873,9 +1804,7 @@ function scrollToPanel(index){
   if(!target || index === currentIndex || isNavigating) return;
 
   isNavigating = true;
-  const prevIndex = currentIndex;
-
-  setActiveIndex(index, index > prevIndex ? 1 : -1);
+  setActiveIndex(index);
 
   sceneShell.scrollTo({
     left: target.offsetLeft,
@@ -1905,10 +1834,8 @@ sceneShell.addEventListener('scroll', () => {
 }, { passive: true });
 
 sceneShell.addEventListener('wheel', (e) => {
-  if(isNavigating || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) {
-    e.preventDefault();
-    return;
-  }
+  if(isNavigating) return;
+  if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
   e.preventDefault();
   const dir = e.deltaY > 0 ? 1 : -1;
   scrollToPanel(Math.max(0, Math.min(panels.length - 1, currentIndex + dir)));
