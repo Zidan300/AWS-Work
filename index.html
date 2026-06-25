@@ -453,6 +453,21 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     border-color .4s var(--ease);
 }
 
+.card-border-overlay{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:5;
+}
+.card-border-overlay polygon{
+  fill:none;
+  stroke:#000;
+  stroke-width:3px;
+  vector-effect:non-scaling-stroke;
+}
+
 .about-diagram{
   position:absolute;
   left:50%;
@@ -710,7 +725,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 
 .project-card{
   position:relative;
-  overflow:hidden;
+  overflow:visible;
   padding:0;
   border-radius:0;
   min-height:auto;
@@ -723,6 +738,12 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   left:50%;
   top:50%;
   width:var(--project-card-size);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.06),
+    0 4px 24px rgba(0,0,0,0.05),
+    0 12px 48px rgba(0,0,0,0.06),
+    0 24px 60px rgba(0,0,0,0.04),
+    var(--glass-inner);
   transition:
     transform .4s var(--ease),
     box-shadow .4s var(--ease),
@@ -740,10 +761,14 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 .projects-layout .project-card:hover{
   transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--project-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(1.08);
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.03),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 4px 24px rgba(0,0,0,0.05),
+    0 12px 48px rgba(0,0,0,0.06),
+    0 24px 60px rgba(0,0,0,0.04),
     0 0 40px rgba(255,77,158,0.15),
-    0 8px 32px rgba(0,0,0,0.08);
-  border-color:rgba(255,77,158,0.2);
+    0 8px 32px rgba(0,0,0,0.08),
+    var(--glass-inner);
+  border-color:rgba(255,77,158,0.25);
   z-index:10;
 }
 
@@ -885,8 +910,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   overflow:hidden;
   transition:
     transform .45s var(--ease),
-    box-shadow .45s var(--ease),
-    border-color .45s var(--ease);
+    box-shadow .45s var(--ease);
   transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1));
   display:flex;
   flex-direction:column;
@@ -896,9 +920,8 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   background:rgba(255,255,255,0.55);
   backdrop-filter:blur(45px) saturate(185%);
   -webkit-backdrop-filter:blur(45px) saturate(185%);
-  border:1px solid rgba(0,0,0,0.06);
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.02),
+    0 2px 8px rgba(0,0,0,0.06),
     0 4px 24px rgba(0,0,0,0.05),
     0 12px 48px rgba(0,0,0,0.06),
     0 24px 60px rgba(0,0,0,0.04),
@@ -946,11 +969,14 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 .certificate-card:hover{
   transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(1.08);
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.03),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 4px 24px rgba(0,0,0,0.05),
+    0 12px 48px rgba(0,0,0,0.06),
+    0 24px 60px rgba(0,0,0,0.04),
     0 0 48px rgba(255,77,158,0.12),
     0 8px 32px rgba(0,0,0,0.08),
     inset 0 1px 0 rgba(255,255,255,0.8);
-  border-color:rgba(255,77,158,0.15);
+  border-color:rgba(255,77,158,0.25);
   z-index:10;
 }
 
@@ -2321,6 +2347,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
         <div class="section-grid section-grid--projects">
           <div class="projects-layout">
             <article class="project-card project-card--featured glass-card project-card--orbit-1" data-reveal style="--r-delay:300ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <div class="project-card__content">
                 <div class="project-index">01 / Immersive commerce</div>
                 <h3>Aurora Commerce</h3>
@@ -2333,6 +2360,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
             </article>
 
             <article class="project-card glass-card project-card--orbit-2" data-reveal style="--r-delay:380ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <div class="project-card__content">
                 <div class="project-index">02 / Design system</div>
                 <h3>Studio OS</h3>
@@ -2344,6 +2372,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
             </article>
 
             <article class="project-card glass-card project-card--orbit-3" data-reveal style="--r-delay:440ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <div class="project-card__content">
                 <div class="project-index">03 / Launch page</div>
                 <h3>Noir Launch</h3>
@@ -2355,6 +2384,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
             </article>
 
             <article class="project-card glass-card project-card--orbit-4" data-reveal style="--r-delay:500ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <div class="project-card__content">
                 <div class="project-index">04 / Product narrative</div>
                 <h3>Atlas Grid</h3>
@@ -2367,6 +2397,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
             </article>
 
             <article class="project-card glass-card project-card--orbit-5" data-reveal style="--r-delay:560ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <div class="project-card__content">
                 <div class="project-index">05 / Brand story</div>
                 <h3>Lumen Case</h3>
@@ -2385,36 +2416,43 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
         <div class="section-grid section-grid--certificates">
           <div class="certificate-layout">
             <article class="certificate-card cert-card--orbit-1" data-reveal style="--r-delay:300ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Luxury UI Systems</strong>
               <span class="certificate-org">Design Lab</span>
             </article>
 
             <article class="certificate-card cert-card--orbit-2" data-reveal style="--r-delay:340ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Motion Interface Practice</strong>
               <span class="certificate-org">Motion Academy</span>
             </article>
 
             <article class="certificate-card cert-card--orbit-3" data-reveal style="--r-delay:380ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Responsive Product Design</strong>
               <span class="certificate-org">Studio School</span>
             </article>
 
             <article class="certificate-card cert-card--orbit-4" data-reveal style="--r-delay:420ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Frontend Engineering</strong>
               <span class="certificate-org">Code Institute</span>
             </article>
 
             <article class="certificate-card cert-card--orbit-5" data-reveal style="--r-delay:460ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Creative Web Craft</strong>
               <span class="certificate-org">Portfolio Guild</span>
             </article>
 
             <article class="certificate-card cert-card--orbit-6" data-reveal style="--r-delay:500ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Visual Design Foundations</strong>
               <span class="certificate-org">Design School</span>
             </article>
 
             <article class="certificate-card cert-card--orbit-7" data-reveal style="--r-delay:540ms">
+              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
               <strong>Interaction Prototyping</strong>
               <span class="certificate-org">UX Academy</span>
             </article>
