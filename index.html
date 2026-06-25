@@ -129,14 +129,12 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 .nav{
   position:relative;
   display:flex;
-  gap:6px;
-  padding:8px;
+  gap:4px;
+  padding:6px;
   border-radius:var(--radius-full);
-  background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(50px) saturate(190%);
-  -webkit-backdrop-filter:blur(50px) saturate(190%);
-  box-shadow:0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03);
-  border:1px solid rgba(255,255,255,0.3);
+  background:#ffffff;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.03);
+  border:1px solid rgba(0,0,0,0.04);
   overflow-x:auto;
   overflow-y:hidden;
   scrollbar-width:none;
@@ -179,12 +177,12 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   flex:0 0 auto;
   align-items:center;
   justify-content:center;
-  min-width:84px;
-  padding:12px 15px;
+  min-width:78px;
+  padding:10px 14px;
   border-radius:var(--radius-full);
   color:var(--text-secondary);
   font-weight:600;
-  font-size:.88rem;
+  font-size:.85rem;
   letter-spacing:.02em;
   cursor:pointer;
   transition:
@@ -217,13 +215,13 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   flex:0 0 auto;
   align-items:center;
   justify-content:center;
-  padding:12px 18px;
+  padding:10px 16px;
   border-radius:var(--radius-full);
   border:none;
   background:var(--accent-gradient);
   color:#fff;
   font-weight:700;
-  font-size:.88rem;
+  font-size:.85rem;
   letter-spacing:.02em;
   box-shadow:0 4px 16px rgba(255,77,158,0.2);
   transition:
@@ -463,7 +461,6 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 }
 .card-border-overlay polygon{
   fill:none;
-  stroke:#000;
   stroke-width:3px;
   vector-effect:non-scaling-stroke;
 }
@@ -856,150 +853,99 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 }
 
 .certificate-layout{
-  --cert-card-size:clamp(130px,14vw,220px);
-  --cert-ring-radius:clamp(200px,24vw,360px);
-  position:relative;
-  display:block;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:clamp(24px,3vw,44px) clamp(16px,2vw,32px);
   width:100%;
-  height:min(85vh,840px);
-  min-height:calc((var(--cert-ring-radius) * 2) + var(--cert-card-size) + 60px);
-  isolation:isolate;
+  max-width:min(1100px,92vw);
+  margin:0 auto;
+  padding:clamp(10px,2vw,24px) 0;
 }
 
-.certificate-layout::before{
-  content:'';
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:calc(var(--cert-ring-radius) * 2);
-  aspect-ratio:1;
-  border:1px solid rgba(0,0,0,0.05);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle, rgba(255,255,255,0.25), transparent 70%);
-  box-shadow:inset 0 0 38px rgba(255,77,158,0.03), 0 0 58px rgba(255,77,158,0.04);
-  opacity:1;
-  pointer-events:none;
-}
-
-.certificate-layout::after{
-  content:'';
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:var(--accent-gradient);
-  box-shadow:0 0 24px rgba(255,77,158,0.45);
-  transform:translate(-50%,-50%);
-  pointer-events:none;
+.cert-grid-item{
+  display:flex;
+  flex-direction:column;
 }
 
 .certificate-card{
-  position:absolute;
-  left:50%;
-  top:50%;
-  z-index:2;
-  width:var(--cert-card-size);
-  min-height:0;
-  padding:clamp(14px,1.5vw,22px);
-  border-radius:0;
-  clip-path:polygon(50% 0%, 97.55% 34.55%, 79.39% 90.45%, 20.61% 90.45%, 2.45% 34.55%);
-  aspect-ratio:0.95;
+  position:relative;
+  border-radius:var(--radius-xl);
   overflow:hidden;
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur)) saturate(185%);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(185%);
+  border:1px solid rgba(0,0,0,0.06);
+  box-shadow:var(--glass-shadow);
+  aspect-ratio:1.25;
   transition:
-    transform .45s var(--ease),
-    box-shadow .45s var(--ease);
-  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1));
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  background:rgba(255,255,255,0.55);
-  backdrop-filter:blur(45px) saturate(185%);
-  -webkit-backdrop-filter:blur(45px) saturate(185%);
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.06),
-    0 4px 24px rgba(0,0,0,0.05),
-    0 12px 48px rgba(0,0,0,0.06),
-    0 24px 60px rgba(0,0,0,0.04),
-    inset 0 0.5px 0 rgba(255,255,255,0.7);
+    transform .4s var(--ease),
+    box-shadow .4s var(--ease);
 }
-
-.certificate-card::before{
+.certificate-card::after{
   content:'';
   position:absolute;
   inset:0;
-  background:linear-gradient(135deg, rgba(255,255,255,0.5) 0%, transparent 35%, rgba(255,77,158,0.04) 80%);
-  pointer-events:none;
   border-radius:inherit;
-}
-
-.certificate-card > *{
-  position:relative;
+  background:linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 40%);
+  pointer-events:none;
   z-index:1;
 }
 
-.certificate-card strong{
-  font-size:clamp(.72rem,1vw,1rem);
-  color:var(--text-primary);
+.certificate-card:hover{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.08),
+    0 4px 16px rgba(0,0,0,0.04),
+    inset 0 0.5px 0 rgba(255,255,255,0.7);
+}
+
+.cert-card__preview{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:0;
+  background:linear-gradient(135deg, rgba(255,214,224,0.2), rgba(255,182,193,0.05));
+  border-radius:inherit;
+}
+.cert-card__preview svg{
+  width:clamp(32px,5vw,52px);
+  height:clamp(32px,5vw,52px);
+  color:var(--accent);
+  opacity:0.3;
+}
+
+.cert-desc{
+  text-align:center;
+  padding:10px 4px 0;
+}
+
+.cert-desc__title{
+  font-size:clamp(.82rem,.95vw,1rem);
   font-weight:700;
+  color:var(--text-primary);
   letter-spacing:-.02em;
   line-height:1.2;
+  margin:0;
 }
 
-.certificate-card[data-reveal]{
-  opacity:0;
-  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(0.88);
-  transition:
-    opacity var(--panel-motion-ms) var(--ease) var(--r-delay, 0ms),
-    transform var(--panel-motion-ms) var(--ease) var(--r-delay, 0ms),
-    box-shadow .35s var(--ease),
-    border-color .35s var(--ease);
-}
-
-.panel.is-active .certificate-card[data-reveal],
-.panel.has-revealed .certificate-card[data-reveal]{
-  opacity:1;
-  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1));
-}
-
-.certificate-card:hover{
-  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(1.08);
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.06),
-    0 4px 24px rgba(0,0,0,0.05),
-    0 12px 48px rgba(0,0,0,0.06),
-    0 24px 60px rgba(0,0,0,0.04),
-    0 0 48px rgba(255,77,158,0.12),
-    0 8px 32px rgba(0,0,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.8);
-  border-color:rgba(255,77,158,0.25);
-  z-index:10;
-}
-
-.panel.is-active .certificate-card[data-reveal]:hover{
-  transform:translate(-50%,-50%) rotate(var(--orbit-angle)) translateY(calc(var(--cert-ring-radius) * -1)) rotate(calc(var(--orbit-angle) * -1)) scale(1.08);
-}
-
-.cert-card--orbit-1{ --orbit-angle:0deg; }
-.cert-card--orbit-2{ --orbit-angle:51.43deg; }
-.cert-card--orbit-3{ --orbit-angle:102.86deg; }
-.cert-card--orbit-4{ --orbit-angle:154.29deg; }
-.cert-card--orbit-5{ --orbit-angle:205.71deg; }
-.cert-card--orbit-6{ --orbit-angle:257.14deg; }
-.cert-card--orbit-7{ --orbit-angle:308.57deg; }
-
-.certificate-org{
+.cert-desc__org{
   display:block;
-  margin-top:clamp(4px,0.8vw,6px);
+  margin-top:4px;
+  font-size:clamp(.48rem,.55vw,.6rem);
   color:var(--accent);
   text-transform:uppercase;
-  letter-spacing:.16em;
-  font-size:clamp(.48rem,.6vw,.68rem);
+  letter-spacing:.12em;
   font-weight:600;
+}
+
+.cert-desc__date{
+  display:block;
+  margin-top:3px;
+  font-size:clamp(.4rem,.42vw,.48rem);
+  color:var(--text-tertiary);
+  letter-spacing:.06em;
 }
 
 .social-buttons{
@@ -1279,10 +1225,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   }
 
   .certificate-layout{
-    --cert-card-size:clamp(115px,16vw,155px);
-    --cert-ring-radius:clamp(170px,24vw,225px);
-    height:min(64vh,620px);
-    min-height:calc((var(--cert-ring-radius) * 2) + var(--cert-card-size) + 44px);
+    max-width:min(700px,96vw);
   }
 
   .projects-layout{
@@ -1355,10 +1298,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     display:none;
   }
   .certificate-layout{
-    --cert-card-size:clamp(120px,14vw,170px);
-    --cert-ring-radius:clamp(175px,22vw,260px);
-    height:min(74vh,680px);
-    min-height:calc((var(--cert-ring-radius) * 2) + var(--cert-card-size) + 48px);
+    max-width:min(780px,94vw);
   }
   .projects-layout{
     --project-card-size:clamp(140px,15vw,180px);
@@ -1411,10 +1351,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     min-height:calc((var(--project-ring-radius) * 2) + var(--project-card-size) + 40px);
   }
   .certificate-layout{
-    --cert-card-size:clamp(105px,16vw,140px);
-    --cert-ring-radius:clamp(155px,26vw,205px);
-    height:min(58vh,560px);
-    min-height:calc((var(--cert-ring-radius) * 2) + var(--cert-card-size) + 40px);
+    max-width:min(550px,96vw);
   }
   .section-grid--about{
     align-content:center;
@@ -1659,56 +1596,34 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     height:auto;
     min-height:100%;
     align-content:start;
-    padding-bottom:4px;
+    padding-bottom:8px;
   }
   .certificate-layout{
-    height:auto;
-    min-height:0;
-    display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
-    padding:0 0 4px;
-  }
-  .certificate-layout::before,
-  .certificate-layout::after{
-    display:none;
+    gap:12px 10px;
+    max-width:min(600px,96vw);
+    padding:4px 0 8px;
   }
   .certificate-card{
-    position:relative;
-    left:auto;
-    top:auto;
-    width:100%;
-    transform:none;
-    min-height:0;
-    padding:12px 10px;
-    aspect-ratio:0.85;
-    border-radius:0;
-    clip-path:polygon(50% 0%, 97.55% 34.55%, 79.39% 90.45%, 20.61% 90.45%, 2.45% 34.55%);
+    aspect-ratio:1.1;
   }
-  .certificate-card:last-child{
-    grid-column:1 / -1;
-    justify-self:center;
-    width:calc(50% - 4px);
+  .cert-desc{
+    padding:8px 2px 0;
   }
-  .certificate-card strong{
-    font-size:.65rem;
-    line-height:1.15;
+  .cert-desc__title{
+    font-size:.75rem;
   }
-  .certificate-org{
-    font-size:.48rem;
-    margin-top:3px;
-    letter-spacing:.08em;
+  .cert-desc__org{
+    font-size:.45rem;
   }
   .certificate-card[data-reveal]{
-    transform:none;
     opacity:0;
   }
   .panel.is-active .certificate-card[data-reveal]{
-    transform:none;
+    opacity:1;
   }
-  .certificate-card:hover,
-  .panel.is-active .certificate-card[data-reveal]:hover{
-    transform:translateY(-3px) scale(1.03);
+  .certificate-card:hover{
+    transform:translateY(-4px) scale(1.02);
   }
 
   .contact-card-container{
@@ -1846,16 +1761,21 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     inset:7%;
   }
   .certificate-layout{
-    gap:5px;
+    grid-template-columns:1fr 1fr;
+    gap:8px 6px;
+    max-width:min(400px,96vw);
   }
   .certificate-card{
-    padding:8px 6px;
+    aspect-ratio:1.05;
   }
-  .certificate-card strong{
-    font-size:.55rem;
+  .cert-desc__title{
+    font-size:.62rem;
   }
-  .certificate-org{
-    font-size:.38rem;
+  .cert-desc__org{
+    font-size:.4rem;
+  }
+  .cert-desc__date{
+    font-size:.34rem;
   }
   .contact-glass-card{
     padding:16px 12px 18px;
@@ -2040,51 +1960,34 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
   }
   .section-grid--certificates{
     min-height:100%;
-    align-content:center;
-    gap:4px;
+    align-content:start;
+    padding-bottom:6px;
   }
   .certificate-layout{
-    grid-template-columns:repeat(4,1fr);
-    gap:4px;
-    height:auto;
-    min-height:0;
-  }
-  .certificate-layout::before,
-  .certificate-layout::after{
-    display:none;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    max-width:min(500px,94vw);
   }
   .certificate-card{
-    position:relative;
-    left:auto;
-    top:auto;
-    width:100%;
-    transform:none;
-    min-height:0;
-    padding:6px 4px;
-    aspect-ratio:0.85;
-    clip-path:polygon(50% 0%, 97.55% 34.55%, 79.39% 90.45%, 20.61% 90.45%, 2.45% 34.55%);
+    aspect-ratio:1;
   }
-  .certificate-card:last-child{
-    grid-column:auto;
-    justify-self:auto;
-    width:100%;
+  .cert-desc{
+    padding:6px 2px 0;
   }
-  .certificate-card strong{
-    font-size:.48rem;
+  .cert-desc__title{
+    font-size:.65rem;
   }
-  .certificate-org{
-    font-size:.38rem;
+  .cert-desc__org{
+    font-size:.4rem;
   }
   .certificate-card[data-reveal]{
-    transform:none;
     opacity:0;
   }
   .panel.is-active .certificate-card[data-reveal]{
-    transform:none;
+    opacity:1;
   }
-  .certificate-card:hover,
-  .panel.is-active .certificate-card[data-reveal]:hover{
-    transform:translateY(-2px) scale(1.02);
+  .certificate-card:hover{
+    transform:translateY(-3px) scale(1.02);
   }
   .contact-card-container{
     width:auto;
@@ -2193,18 +2096,15 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
     padding:1px 2px;
   }
   .certificate-layout{
-    grid-template-columns:repeat(4,1fr);
-    gap:3px;
+    grid-template-columns:repeat(3,1fr);
+    gap:4px;
+    max-width:min(380px,92vw);
   }
   .certificate-card{
-    padding:4px 3px;
-    aspect-ratio:0.8;
+    aspect-ratio:0.9;
   }
-  .certificate-card strong{
-    font-size:.4rem;
-  }
-  .certificate-org{
-    font-size:.32rem;
+  .cert-desc{
+    display:none;
   }
   .contact-glass-card{
     padding:8px 8px 10px;
@@ -2242,9 +2142,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 
 @media (min-width: 1800px){
   .certificate-layout{
-    --cert-card-size:clamp(200px,12vw,280px);
-    --cert-ring-radius:clamp(300px,18vw,420px);
-    height:min(82vh,900px);
+    max-width:min(1200px,86vw);
   }
   .projects-layout{
     --project-card-size:clamp(190px,11vw,250px);
@@ -2255,9 +2153,7 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
 
 @media (min-width: 2560px){
   .certificate-layout{
-    --cert-card-size:clamp(260px,11vw,360px);
-    --cert-ring-radius:clamp(380px,16vw,520px);
-    height:min(76vh,1000px);
+    max-width:min(1400px,80vw);
   }
   .projects-layout{
     --project-card-size:clamp(230px,10vw,320px);
@@ -2415,47 +2311,80 @@ img{ -webkit-touch-callout:none; max-width:100%; height:auto; }
         <div class="face-tag">04 / Certificates</div>
         <div class="section-grid section-grid--certificates">
           <div class="certificate-layout">
-            <article class="certificate-card cert-card--orbit-1" data-reveal style="--r-delay:300ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Luxury UI Systems</strong>
-              <span class="certificate-org">Design Lab</span>
-            </article>
 
-            <article class="certificate-card cert-card--orbit-2" data-reveal style="--r-delay:340ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Motion Interface Practice</strong>
-              <span class="certificate-org">Motion Academy</span>
-            </article>
+            <div class="cert-grid-item">
+              <article class="certificate-card" data-reveal style="--r-delay:200ms">
+                <div class="cert-card__preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              </article>
+              <div class="cert-desc">
+                <h4 class="cert-desc__title">Luxury UI Systems</h4>
+                <span class="cert-desc__org">Design Lab</span>
+                <span class="cert-desc__date">Completed 2024</span>
+              </div>
+            </div>
+            <div class="cert-grid-item">
+              <article class="certificate-card" data-reveal style="--r-delay:260ms">
+                <div class="cert-card__preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              </article>
+              <div class="cert-desc">
+                <h4 class="cert-desc__title">Motion Interface Practice</h4>
+                <span class="cert-desc__org">Motion Academy</span>
+                <span class="cert-desc__date">Completed 2024</span>
+              </div>
+            </div>
+            <div class="cert-grid-item">
+              <article class="certificate-card" data-reveal style="--r-delay:320ms">
+                <div class="cert-card__preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              </article>
+              <div class="cert-desc">
+                <h4 class="cert-desc__title">Responsive Product Design</h4>
+                <span class="cert-desc__org">Studio School</span>
+                <span class="cert-desc__date">Completed 2023</span>
+              </div>
+            </div>
+            <div class="cert-grid-item">
+              <article class="certificate-card" data-reveal style="--r-delay:380ms">
+                <div class="cert-card__preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              </article>
+              <div class="cert-desc">
+                <h4 class="cert-desc__title">Frontend Engineering</h4>
+                <span class="cert-desc__org">Code Institute</span>
+                <span class="cert-desc__date">Completed 2023</span>
+              </div>
+            </div>
+            <div class="cert-grid-item">
+              <article class="certificate-card" data-reveal style="--r-delay:440ms">
+                <div class="cert-card__preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              </article>
+              <div class="cert-desc">
+                <h4 class="cert-desc__title">Creative Web Craft</h4>
+                <span class="cert-desc__org">Portfolio Guild</span>
+                <span class="cert-desc__date">Completed 2023</span>
+              </div>
+            </div>
+            <div class="cert-grid-item">
+              <article class="certificate-card" data-reveal style="--r-delay:500ms">
+                <div class="cert-card__preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+              </article>
+              <div class="cert-desc">
+                <h4 class="cert-desc__title">Design Systems Architecture</h4>
+                <span class="cert-desc__org">Design Academy</span>
+                <span class="cert-desc__date">Completed 2023</span>
+              </div>
+            </div>
 
-            <article class="certificate-card cert-card--orbit-3" data-reveal style="--r-delay:380ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Responsive Product Design</strong>
-              <span class="certificate-org">Studio School</span>
-            </article>
-
-            <article class="certificate-card cert-card--orbit-4" data-reveal style="--r-delay:420ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Frontend Engineering</strong>
-              <span class="certificate-org">Code Institute</span>
-            </article>
-
-            <article class="certificate-card cert-card--orbit-5" data-reveal style="--r-delay:460ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Creative Web Craft</strong>
-              <span class="certificate-org">Portfolio Guild</span>
-            </article>
-
-            <article class="certificate-card cert-card--orbit-6" data-reveal style="--r-delay:500ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Visual Design Foundations</strong>
-              <span class="certificate-org">Design School</span>
-            </article>
-
-            <article class="certificate-card cert-card--orbit-7" data-reveal style="--r-delay:540ms">
-              <svg class="card-border-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 97.55,34.55 79.39,90.45 20.61,90.45 2.45,34.55" fill="none" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
-              <strong>Interaction Prototyping</strong>
-              <span class="certificate-org">UX Academy</span>
-            </article>
           </div>
         </div>
       </section>
